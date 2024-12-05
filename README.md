@@ -66,7 +66,8 @@ I'm using `podman` for testing if configuration is correct,
 ```bash
 podman run -v $PWD:/var/db/repos/moist \
            -v /var/db/repos/gentoo:/var/db/repos/gentoo \
-           -it --rm -h $(hostname) gentoo/stage3:systemd
+           -v /etc/portage/gnupg:/etc/portage/gnupg \
+           --name moist -it -h $(hostname) gentoo/stage3:systemd
 
 # In podman:
 mkdir -p /etc/portage/repos.conf
@@ -75,3 +76,5 @@ echo -e "[moist]\nlocation=/var/db/repos/moist" \
 emerge -va set-up/portage
 emerge ...
 ```
+
+You can use `emerge -1` with `emerge -cva` for faster testing.

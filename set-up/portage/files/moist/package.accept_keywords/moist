@@ -1,0 +1,5 @@
+# Unstable:
+app-shells/zoxide ~amd64
+
+# Live Rebuild:
+app-editors/helix **

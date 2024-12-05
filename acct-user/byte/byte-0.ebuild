@@ -5,9 +5,21 @@ inherit acct-user
 ACCT_USER_ID="1000"
 ACCT_USER_ENFORCE_ID="yes"
 ACCT_USER_SHELL="/bin/bash"
-ACCT_USER_HOME="/home/byte"
+ACCT_USER_HOME="/home/${PN}"
 
 # TODO: root bin daemon sys adm disk wheel floppy tape video
-ACCT_USER_GROUPS=("byte" "wheel")
+ACCT_USER_GROUPS=("${PN}" "wheel")
 
 acct-user_add_deps
+
+src_compile() {
+	# For following installation:
+	echo "${PN}" > "user"
+}
+
+src_install() {
+	acct-user_src_install
+
+	insinto "/var/db/moist"
+	doins "user" || die
+}

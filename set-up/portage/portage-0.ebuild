@@ -25,7 +25,7 @@ pkg_pretend() {
 
 src_compile() {
 	# In workdir:
-	cpuid2cpuflags > "cpuflags" || die
+	echo "*/* $(cpuid2cpuflags)" > "cpuflags" || die
 }
 
 src_install() {

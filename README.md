@@ -16,6 +16,12 @@ use multiple stages, to successfully setup the machine:
    to overlay using `eselect repository` (you might need to install some
    dependency tools).
 
+   And besure to setup the hostname, e.g.
+
+   ```bash
+   echo "evil" > /etc/hostname
+   ```
+
 2. First thing first, is to setup the Gentoo base (setting partition is some
    kind of difficult with only overlay), which includes:
 
@@ -28,22 +34,22 @@ use multiple stages, to successfully setup the machine:
    4. The initial packages, such as `linux-firmware`, to prevent from failing
       the next step (UKI image will use the firmware to integrate ucode).
 
-   5. The world sets.
+   5. The sets.
 
    Base on this, if you have new machine which want to install the Gentoo, try
-   modify one of `setup-machine/..` file.
+   modify one of `set-up/portage/..` file.
 
-   Then use `emerge -a setup-machine/evil` or other machine name to emerge it.
+   Then use `emerge -va set-up/portage` or other machine name to emerge it.
 
 3. And the next step (huhm), is to setup your current user, for me I'm using
-   the `emerge -a setup-user/byte` with `UID:GID = 1000:1000`.
-
-   The `@moist-world` will emerge what you selected.
+   the `emerge -va setup-user/byte` with `UID:GID = 1000:1000`.
 
 4. The last step is to setup bootup things, like kernel and desktop environment.
    Just using world set, and it will be ready for you.
 
-   The secret is `emerge -a @moist-world`.
+   The secret is `emerge -va @moist-world`.
+
+5. Horray! I like the number five !)
 
 ## Arriving `$HOME`
 
@@ -52,3 +58,20 @@ services, we use the `SLOT` in ebuild to indicate what user you're using.
 
 For dynamic purpose, the `SLOT` will read from environment variable `$SUDO_USER`
 and `$USER`.
+
+## Testing
+
+I'm using `podman` for testing if configuration is correct,
+
+```bash
+podman run -v $PWD:/var/db/repos/moist \
+           -v /var/db/repos/gentoo:/var/db/repos/gentoo \
+           -it --rm -h $(hostname) gentoo/stage3:systemd
+
+# In podman:
+mkdir -p /etc/portage/repos.conf
+echo -e "[moist]\nlocation=/var/db/repos/moist" \
+   > /etc/portage/repos.conf/moist.conf
+emerge -va set-up/portage
+emerge ...
+```

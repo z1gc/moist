@@ -65,4 +65,3 @@ pkg_postinst() {
 	systemd-firstboot --hostname="${MOIST_HOST}" --timezone="Asia/Shanghai" || die
 	systemctl preset-all --preset-mode=enable-only || die
 }
-

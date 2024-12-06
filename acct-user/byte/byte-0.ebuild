@@ -11,15 +11,3 @@ ACCT_USER_HOME="/home/${PN}"
 ACCT_USER_GROUPS=("${PN}" "wheel")
 
 acct-user_add_deps
-
-src_compile() {
-	# For following installation:
-	echo "${PN}" > "user"
-}
-
-src_install() {
-	acct-user_src_install
-
-	insinto "/var/db/moist"
-	doins "user" || die
-}

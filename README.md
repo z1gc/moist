@@ -67,7 +67,7 @@ I'm using `podman` for testing if configuration is correct,
 podman run -v $PWD:/var/db/repos/moist \
            -v /var/db/repos/gentoo:/var/db/repos/gentoo \
            -v /etc/portage/gnupg:/etc/portage/gnupg \
-           --name moist -it -h $(hostname) gentoo/stage3:systemd
+           --rm -it -h $(hostname) gentoo/stage3:systemd
 
 # In podman:
 mkdir -p /etc/portage/repos.conf

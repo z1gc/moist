@@ -21,10 +21,6 @@ BDEPEND="
 
 S="${WORKDIR}"
 
-if [[ -f "${FILESDIR}/machine/${HOSTNAME}" ]]; then
-	source "${FILESDIR}/machine/${HOSTNAME}"
-fi
-
 src_compile() {
 	# https://wiki.gentoo.org/wiki/CPU_FLAGS_*
 	echo "*/* $(cpuid2cpuflags)" > "cpuflags" || die
@@ -47,14 +43,13 @@ src_install() {
 }
 
 pkg_postinst() {
+	# Will not die:
+	source "${FILESDIR}/machine/${HOSTNAME}"
+
 	# Profile
 	if [[ "${PROFILE}" != "" ]]; then
 		eselect profile set "${PROFILE}" || die
 	fi
-
-	# Reset the moist:
-	eselect repository remove moist || die
-	eselect repository add moist git https://github.com/z1gc/moist
 
 	# New repository:
 	eselect repository enable gentoo-zh || die
@@ -69,7 +64,6 @@ pkg_postinst() {
 
 pkg_postrm() {
 	# TODO: systemd units.
-	eselect repository remove moist
 	eselect repository remove gentoo-zh
 	eselect repository remove guru
 }

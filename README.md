@@ -20,8 +20,11 @@ curl https://gist.githubusercontent.com/z1gc/a732d040583611956036ceeccc2b6aa8/ra
 ./gix clone --depth 1 https://github.com/z1gc/moist /var/db/repos/moist
 rm -fv gix
 
-echo -e "[moist]\nlocation=/var/db/repos/moist" \
-   > /etc/portage/repos.conf/moist.conf
+echo "[moist]
+location = /var/db/repos/moist
+sync-type = git
+sync-uri = https://github.com/z1gc/moist
+" > /etc/portage/repos.conf/moist.conf
 
 # Global config using USE:
 echo "evil" > /etc/hostname
@@ -44,12 +47,6 @@ podman run -v $PWD:/var/db/repos/moist \
            -v /var/db/repos/gentoo:/var/db/repos/gentoo \
            -v /etc/portage/gnupg:/etc/portage/gnupg \
            --rm -it -h $(hostname) gentoo/stage3:systemd
-
-# In podman:
-mkdir -p /etc/portage/repos.conf
-echo -e "[moist]\nlocation=/var/db/repos/moist" \
-   > /etc/portage/repos.conf/moist.conf
-emerge ...
 ```
 
 You can use `emerge -1` with `emerge -vac` for faster testing.

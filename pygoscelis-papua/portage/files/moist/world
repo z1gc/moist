@@ -1,0 +1,49 @@
+# Kernel, the 'linux-firmware' should be emerge firstly for UKI ucode:
+#  1. 'USE=-dist-kernel emerge -av sys-kernel/linux-firmware'
+#  2. 'emerge -av sys-kernel/gentoo-linux'
+sys-kernel/linux-firmware
+sys-kernel/gentoo-kernel
+sys-kernel/installkernel
+
+# Core system
+pygoscelis-papua/portage:${SLOT_HOST}
+sys-fs/btrfs-progs
+
+# Language tools
+dev-util/ccache
+sys-devel/clang
+dev-python/python-lsp-server
+dev-python/mypy
+dev-util/bash-language-server
+dev-util/shellcheck-bin
+
+# Portage
+app-portage/gentoolkit
+app-portage/smart-live-rebuild
+app-portage/pfl
+app-portage/command-not-found
+
+# SRE
+sys-apps/fd
+sys-apps/ripgrep
+sys-process/iotop-c
+dev-debug/strace
+dev-util/perf
+dev-debug/bpftrace
+app-shells/fish
+pygoscelis-papua/fish:${SLOT_HOST}
+app-shells/fzf
+app-shells/zoxide
+app-editors/nano
+app-editors/helix
+pygoscelis-papua/helix:${SLOT_HOST}
+sys-apps/bat
+app-arch/7zip
+
+# Version control
+dev-vcs/repo
+dev-vcs/gitoxide
+
+# Virtualization, container
+app-emulation/virt-manager
+app-containers/podman

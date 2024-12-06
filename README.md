@@ -7,29 +7,20 @@ running the Gentoo Linux ;)
 
 Why named Moist? I've no idea.
 
+## Use
+
+Moist using `USE` flags for specifying components, and different machine/user
+has different `SLOT` to indicate.
+
 ## Stages Design
 
 For new build:
 
 ```bash
-cd /tmp
+curl "https://raw.githubusercontent.com/z1gc/moist/refs/heads/main/bootstrap.sh" | bash
 
-# TODO: More shorten way?
-curl https://gist.githubusercontent.com/z1gc/a732d040583611956036ceeccc2b6aa8/raw/install-gitoxide.sh | bash
-./gix clone --depth 1 https://mirrors.ustc.edu.cn/gentoo.git /var/db/repos/gentoo
-./gix clone --depth 1 https://github.com/z1gc/moist /var/db/repos/moist
-rm -fv gix
-
-echo "[moist]
-location = /var/db/repos/moist
-sync-type = git
-sync-uri = https://github.com/z1gc/moist
-" > /etc/portage/repos.conf/moist.conf
-
-# Global config using USE:
-echo "evil" > /etc/hostname
-emerge -va pygoscelis-papua/portage
-emerge --sync
+emerge -va1 pygoscelis-papua/portage:evil
+emerge -va -UNDu @world
 
 reboot
 ```

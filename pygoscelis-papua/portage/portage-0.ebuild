@@ -1,30 +1,44 @@
-EAPI="8"
-SLOT="0"
-KEYWORDS="amd64 arm64"
+# This ebuild only configures the portage, setting up what packages will be
+# installed, and what USE should be choosed depend on hostname.
+#
+# Okay, I've lied, it also setup the systemd, that' all, really :O
 
-if [[ "${HOSTNAME}" == "" ]]; then
-	HOSTNAME="$(< "/etc/hostname")"
+EAPI="8"
+KEYWORDS="amd64"
+SLOT=""
+
+if [[ "${SLOT}" == "" ]]; then
+	die "SLOT should be there!"
 fi
 
-# TODO: Like `CPU_FLAGS_X86`?
-IUSE="+${HOSTNAME}"
+IUSE="+moist +${SLOT} $(< "${FILESDIR}/${SLOT}/use")"
+MOIST_USER="$(< "${FILESDIR}/${SLOT}/user")"
 
 DEPEND="
+	acct-user/${MOIST_USER}
+	sys-apps/systemd
 	app-admin/sudo
-	dev-vcs/git
 "
 RDEPEND="${DEPEND}"
-BDEPEND="
-	app-portage/cpuid2cpuflags
-	app-eselect/eselect-repository
-"
+BDEPEND="app-portage/cpuid2cpuflags"
 
 S="${WORKDIR}"
 
 src_compile() {
 	# https://wiki.gentoo.org/wiki/CPU_FLAGS_*
 	echo "*/* $(cpuid2cpuflags)" > "cpuflags" || die
-	echo "pygocelis-papua/* ${HOSTNAME}" > "pygocelis-papua" || die
+
+	# world and set, gentoo will sort it then :)
+	for comp in "${FILESDIR}/"*; do
+		local name="$(basename "${comp}")"
+		if [[ ! -f "${comp}/world" ]] || ! use "${name}"; then
+			continue
+		fi
+
+		SLOT_USER="${MOIST_USER}" SLOT_HOST="{SLOT}" envsubst < "${comp}/world"
+	done > "world"
+	grep -o '^[^#]*' "world" | sort | sponge "world"
+	echo "" > "world_sets"
 
 	# sudo
 	echo "%wheel ALL=(ALL:ALL) ALL" > "wheel" || die
@@ -33,37 +47,44 @@ src_compile() {
 
 src_install() {
 	insinto "/etc/portage/package.use"
-	doins "pygocelis-papua" "cpuflags" || die
+	doins "cpuflags" || die
 
 	insinto "/etc/portage"
 	doins -r "${FILESDIR}/conf/." || die
+
+	insinto "/etc/portage/make.conf"
+	for comp in "${FILESDIR}/"*; do
+		local name="$(basename "${comp}")"
+		if [[ ! -d "${comp}/make.conf" ]] || ! use "${name}"; then
+			test
+		fi
+
+		doins -r "${comp}/make.conf/." || die
+	done
+
+	insinto "/var/lib/portage"
+	doins "world" "world_sets"
 
 	insinto "/etc/sudoers.d"
 	doins "wheel" || die
 }
 
 pkg_postinst() {
-	# Will not die:
-	source "${FILESDIR}/machine/${HOSTNAME}"
+	# profile
+	for comp in "${FILESDIR}/"*; do
+		local name="$(basename "${comp}")"
+		if [[ ! -f "${comp}/profile" ]] || ! use "${name}"; then
+			continue
+		fi
 
-	# Profile
-	if [[ "${PROFILE}" != "" ]]; then
-		eselect profile set "${PROFILE}" || die
-	fi
-
-	# New repository:
-	eselect repository enable gentoo-zh || die
-	eselect repository enable guru || die
+		eselect profile "$(< "${comp}/profile")"
+		break
+	done
 
 	# systemd setup, TODO: ensure we have systemd at first?
-	# TODO: eclass?
-	systemd-machine-id-setup || die
-	systemd-firstboot --hostname="${HOSTNAME}" --timezone="Asia/Shanghai" || die
-	systemctl preset-all --preset-mode=enable-only || die
-}
-
-pkg_postrm() {
-	# TODO: systemd units.
-	eselect repository remove gentoo-zh
-	eselect repository remove guru
+	if [[ ! -f /etc/machine-id ]]; then
+		systemd-machine-id-setup || die
+		systemd-firstboot --hostname="${SLOT}" --timezone="Asia/Shanghai" || die
+		systemctl preset-all --preset-mode=enable-only || die
+	fi
 }

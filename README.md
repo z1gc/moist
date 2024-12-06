@@ -9,55 +9,31 @@ Why named Moist? I've no idea.
 
 ## Stages Design
 
-It's hard to keep everything shiny with just one `emerge` command, therefore we
-use multiple stages, to successfully setup the machine:
+For new build:
 
-1. Install Gentoo as usual, after `chroot` and `emerge-webrsync`, add this repo
-   to overlay using `eselect repository` (you might need to install some
-   dependency tools).
+```bash
+chroot /where/your/stage3
 
-   And besure to setup the hostname, e.g.
+# In chroot:
+cd /tmp
 
-   ```bash
-   echo "evil" > /etc/hostname
-   ```
+# TODO: More shorten way?
+curl https://gist.githubusercontent.com/z1gc/a732d040583611956036ceeccc2b6aa8/raw/install-gitoxide.sh | bash
+./gix clone --depth 1 https://mirrors.ustc.edu.cn/gentoo.git /var/db/repos/gentoo
+./gix clone --depth 1 https://github.com/z1gc/moist /var/db/repos/moist
+rm -fv gix
 
-2. First thing first, is to setup the Gentoo base (setting partition is some
-   kind of difficult with only overlay), which includes:
+MOIST_USER=byte MOIST_HOST=evil emerge -va pygoscelis-papua/system
+emerge -va -UNDu @world
+emerge --sync
+emerge -va @moist-world
 
-   1. The `make.conf` generated based on what your machine defines.
+reboot
+```
 
-   2. The profile which going to use.
+## Next Step
 
-   3. The UKI kernel config.
-
-   4. The initial packages, such as `linux-firmware`, to prevent from failing
-      the next step (UKI image will use the firmware to integrate ucode).
-
-   5. The sets.
-
-   Base on this, if you have new machine which want to install the Gentoo, try
-   modify one of `set-up/portage/..` file.
-
-   Then use `emerge -va set-up/portage` or other machine name to emerge it.
-
-3. And the next step (huhm), is to setup your current user, for me I'm using
-   the `emerge -va setup-user/byte` with `UID:GID = 1000:1000`.
-
-4. The last step is to setup bootup things, like kernel and desktop environment.
-   Just using world set, and it will be ready for you.
-
-   The secret is `emerge -va @moist-world`.
-
-5. Horray! I like the number five !)
-
-## Arriving `$HOME`
-
-For some dotfiles that are placed into `$HOME` directory, or systemd user
-services, we use the `SLOT` in ebuild to indicate what user you're using.
-
-For dynamic purpose, the `SLOT` will read from environment variable `$SUDO_USER`
-and `$USER`.
+[ ] Simplify the build steps more...
 
 ## Testing
 
@@ -73,8 +49,7 @@ podman run -v $PWD:/var/db/repos/moist \
 mkdir -p /etc/portage/repos.conf
 echo -e "[moist]\nlocation=/var/db/repos/moist" \
    > /etc/portage/repos.conf/moist.conf
-emerge -va set-up/portage
 emerge ...
 ```
 
-You can use `emerge -1` with `emerge -cva` for faster testing.
+You can use `emerge -1` with `emerge -vac` for faster testing.

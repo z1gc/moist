@@ -2,12 +2,12 @@ EAPI="8"
 SLOT="0"
 KEYWORDS="amd64 arm64"
 
-DEPEND="
-	dev-vcs/git
-	app-admin/sudo
-"
+DEPEND="app-admin/sudo"
 RDEPEND="${DEPEND}"
-BDEPEND="app-portage/cpuid2cpuflags"
+BDEPEND="
+	app-portage/cpuid2cpuflags
+	app-eselect/eselect-repository
+"
 
 if [[ -f "/var/db/moist/user" ]]; then
 	DEPEND+=" acct-user/$(< "/var/db/moist/user")"
@@ -59,9 +59,19 @@ src_install() {
 }
 
 pkg_postinst() {
+	# New repository:
+	eselect repository enable gentoo-zh
+	eselect repository enable guru
+
 	# systemd setup, TODO: ensure we have systemd at first?
 	# TODO: eclass?
 	systemd-machine-id-setup || die
 	systemd-firstboot --hostname="${MOIST_HOST}" --timezone="Asia/Shanghai" || die
 	systemctl preset-all --preset-mode=enable-only || die
+}
+
+pkg_postrm() {
+	# TODO: systemd units.
+	eselect repository disable gentoo-zh
+	eselect repository disable guru
 }

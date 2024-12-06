@@ -1,3 +1,0 @@
-# Kernel, Bootloader, UKI:
-sys-kernel/installkernel systemd-boot uki ukify
-sys-apps/systemd boot ukify

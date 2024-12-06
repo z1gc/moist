@@ -12,9 +12,6 @@ Why named Moist? I've no idea.
 For new build:
 
 ```bash
-chroot /where/your/stage3
-
-# In chroot:
 cd /tmp
 
 # TODO: More shorten way?
@@ -23,10 +20,13 @@ curl https://gist.githubusercontent.com/z1gc/a732d040583611956036ceeccc2b6aa8/ra
 ./gix clone --depth 1 https://github.com/z1gc/moist /var/db/repos/moist
 rm -fv gix
 
-MOIST_USER=byte MOIST_HOST=evil emerge -va pygoscelis-papua/system
-emerge -va -UNDu @world
+echo -e "[moist]\nlocation=/var/db/repos/moist" \
+   > /etc/portage/repos.conf/moist.conf
+
+# Global config using USE:
+echo "evil" > /etc/hostname
+emerge -va pygoscelis-papua/portage
 emerge --sync
-emerge -va @moist-world
 
 reboot
 ```

@@ -1,0 +1,14 @@
+#!/usr/bin/env python3
+
+from configparser import ConfigParser
+import sys
+from typing import List
+
+
+def main(args: List[str]) -> int:
+    parser = ConfigParser()
+    parser.read(args[0])
+
+
+if __name__ == "__main__":
+    exit(main(sys.argv[1:]))

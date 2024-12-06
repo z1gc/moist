@@ -6,7 +6,7 @@ if [[ "${HOSTNAME}" == "" ]]; then
 	HOSTNAME="$(< "/etc/hostname")"
 fi
 
-# TODO: Like `CPU_FLAGS_X86`?
+# This is just an indicator, telling you which machine is selected.
 IUSE="+${HOSTNAME}"
 
 DEPEND="
@@ -24,7 +24,9 @@ S="${WORKDIR}"
 src_compile() {
 	# https://wiki.gentoo.org/wiki/CPU_FLAGS_*
 	echo "*/* $(cpuid2cpuflags)" > "cpuflags" || die
-	echo "pygocelis-papua/* ${HOSTNAME}" > "pygocelis-papua" || die
+
+	# generate make.conf:
+	python3 "${FILESDIR}/fx" "${FILESDIR}/templ/build.conf" "${FILESDIR}/${HOSTNAME}/build"
 
 	# sudo
 	echo "%wheel ALL=(ALL:ALL) ALL" > "wheel" || die
@@ -33,23 +35,18 @@ src_compile() {
 
 src_install() {
 	insinto "/etc/portage/package.use"
-	doins "pygocelis-papua" "cpuflags" || die
+	doins "cpuflags" || die
 
 	insinto "/etc/portage"
-	doins -r "${FILESDIR}/conf/." || die
+	doins -r "${FILESDIR}/conf/." "${FILESDIR}/${HOSTNAME}/conf/." || die
 
 	insinto "/etc/sudoers.d"
 	doins "wheel" || die
 }
 
 pkg_postinst() {
-	# Will not die:
-	source "${FILESDIR}/machine/${HOSTNAME}"
-
-	# Profile
-	if [[ "${PROFILE}" != "" ]]; then
-		eselect profile set "${PROFILE}" || die
-	fi
+	# Profile:
+	eselect profile set "$(< "${FILESDIR}/${HOSTNAME}/profile")" || die
 
 	# New repository:
 	eselect repository enable gentoo-zh || die
@@ -57,13 +54,9 @@ pkg_postinst() {
 
 	# systemd setup, TODO: ensure we have systemd at first?
 	# TODO: eclass?
-	systemd-machine-id-setup || die
-	systemd-firstboot --hostname="${HOSTNAME}" --timezone="Asia/Shanghai" || die
-	systemctl preset-all --preset-mode=enable-only || die
-}
-
-pkg_postrm() {
-	# TODO: systemd units.
-	eselect repository remove gentoo-zh
-	eselect repository remove guru
+	if [[ ! -f /etc/machine-id ]]; then
+		systemd-machine-id-setup || die
+		systemd-firstboot --hostname="${HOSTNAME}" --timezone="Asia/Shanghai" || die
+		systemctl preset-all --preset-mode=enable-only || die
+	fi
 }

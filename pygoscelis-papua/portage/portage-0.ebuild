@@ -86,6 +86,11 @@ src_install() {
 	doins "wheel" || die
 }
 
+pkg_preinst() {
+	# remove existing files, don't want an extra dispatch-conf
+	rm -f /etc/portage/binrepos.conf/gentoobinhost.conf
+}
+
 pkg_postinst() {
 	# profile
 	for comp in $(use_directory "profile"); do

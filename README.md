@@ -17,9 +17,9 @@ has different `SLOT` to indicate.
 For new build:
 
 ```bash
-curl "https://raw.githubusercontent.com/z1gc/unstable/refs/heads/main/bootstrap.sh" | bash
+curl -L https://github.com/z1gc/unstable/raw/refs/heads/main/boostrap.sh | bash
 
-echo "evil" > /etc/hostname
+echo evil > /etc/hostname
 emerge -va1 pygoscelis-papua/portage
 emerge -va -UNDu @world
 

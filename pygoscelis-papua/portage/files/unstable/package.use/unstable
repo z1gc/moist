@@ -1,2 +1,9 @@
 sys-kernel/installkernel systemd-boot uki ukify
 sys-apps/systemd boot ukify
+
+# https://gitweb.gentoo.org/repo/gentoo.git/tree/sys-kernel/linux-firmware/linux-firmware-20241017-r3.ebuild
+# The dist-kernel flag here only affects the initramfs build, which we will not
+# use, IMO it's safe to turn it off to avoid dependency circular.
+# (Don't know if the dist-kernel has impact on installkernel? I'm still willing
+#  to have a installkernel hook after the linux-firmware is updated).
+sys-kernel/linux-firmware -dist-kernel

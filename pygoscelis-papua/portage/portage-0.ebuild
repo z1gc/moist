@@ -6,17 +6,13 @@
 # TabSize=2
 
 EAPI="8"
+
+inherit unstable
+
 KEYWORDS="amd64"
-SLOT="$(< "/etc/hostname")"
+SLOT="0"
 
-# Can't use FILESDIR in here, therefore a fixed ebuild direcotry is using...
-# Ugly, and TODO may never be done...
-EBUILDDIR="${BASH_SOURCE[0]%/*}/files"
-UNSTABLE_USER="$(< "${EBUILDDIR}/${SLOT}/user")"
-
-IUSE="$(< "${EBUILDDIR}/${SLOT}/use")"
 DEPEND="
-	acct-user/${UNSTABLE_USER}
 	sys-apps/systemd
 	app-admin/sudo
 "
@@ -25,14 +21,27 @@ BDEPEND="app-portage/cpuid2cpuflags"
 
 S="${WORKDIR}"
 
+# Directory format:
+#   pygoscelis-papua/portage/files/{use}/{rest}
+#
+# For machine, the {rest} part should contains:
+#   /use: The USE flags that it's using
+#   /user: The main user that unstable controls (TODO: Multiuser?)
+# Machine is also an USE, although it never shows up in the IUSE.
+#
+# And the common {rest} part:
+#   /world: What this USE brings up to the world.
+#   /profile: This USE will require the eselect profile.
+#   /make.conf, ...: /etc/portage, @see src_install.
+
 use_directory() {
 	local filter="$1"
 
 	for comp in "${FILESDIR}/"*; do
 		local name="$(basename "${comp}")"
 		case "${name}" in
-		"unstable"|"${SLOT}")
-			# no-op
+		"unstable"|"${MNSTABLE}")
+			# defaults to use
 		;;
 		*)
 			use "${name}" || continue
@@ -48,15 +57,24 @@ use_directory() {
 }
 
 src_compile() {
-	# https://wiki.gentoo.org/wiki/CPU_FLAGS_*
-	echo "*/* $(cpuid2cpuflags)" > "cpuflags" || die
+	unstable_mnstable
 
 	# world and set, gentoo will sort it then :)
 	for comp in $(use_directory "world"); do
-		SLOT_USER="${UNSTABLE_USER}" SLOT_HOST="${SLOT}" envsubst < "${comp}" || die
-	done > "world.tmp"
-	grep -o '^[^#]*' "world.tmp" | sort > "world"
+		grep -o '^[^#]*' "${comp}" || die
+	done | sort > "world"
 	echo "" > "world_sets"
+
+	# Setting both MNSTABLE and UNSTABLE for portage, to avoid inconsistency when
+	# upgrading through emerge.
+	# TODO: Place the special portage to other places?
+	( echo "pygoscelis-papua/portage MNSTABLE: ${MNSTABLE[*]} UNSTABLE: ${UNSTABLE[*]}"
+		echo "pygoscelis-papua/* MNSTABLE: ${MNSTABLE[*]}"
+		echo "aptenodytes-forsteri/* UNSTABLE: ${UNSTABLE[*]}"
+	) > "mnstable"
+
+	# https://wiki.gentoo.org/wiki/CPU_FLAGS_*
+	echo "*/* $(cpuid2cpuflags)" > "cpuflags" || die
 
 	# sudo
 	echo "%wheel ALL=(ALL:ALL) ALL" > "wheel" || die
@@ -64,8 +82,10 @@ src_compile() {
 }
 
 src_install() {
+	unstable_mnstable
+
 	insinto "/etc/portage/package.use"
-	doins "cpuflags" || die
+	doins "mnstable" "cpuflags" || die
 
 	# TODO: Merge into one directory before install?
 	insinto "/etc/portage"
@@ -73,7 +93,8 @@ src_install() {
 							$(use_directory "make.conf") \
 							$(use_directory "package.accept_keywords") \
 							$(use_directory "package.license") \
-							$(use_directory "package.use")
+							$(use_directory "package.use") \
+							$(use_directory "repos.conf")
 	do
 		doins -r "${comp}" || die
 	done
@@ -89,19 +110,26 @@ src_install() {
 pkg_preinst() {
 	# remove existing files, don't want an extra dispatch-conf
 	rm -f /etc/portage/binrepos.conf/gentoobinhost.conf
+	rm -f /etc/portage/repos.conf/unstable.conf
 }
 
 pkg_postinst() {
+	unstable_mnstable
+
 	# profile
 	for comp in $(use_directory "profile"); do
-		eselect profile set "$(< "${comp}")"
+		local profile="$(< "${comp}")"
+		einfo "New eselect profile: ${profile}"
+		eselect profile set "${profile}"
 		break
 	done
 
 	# systemd setup, TODO: ensure we have systemd at first?
 	if [[ ! -f /etc/machine-id ]]; then
 		systemd-machine-id-setup || die
-		systemd-firstboot --hostname="${SLOT}" --timezone="Asia/Shanghai" || die
+		systemd-firstboot --hostname="${MNSTABLE}" --timezone="Asia/Shanghai" || die
 		systemctl preset-all --preset-mode=enable-only || die
 	fi
+
+	einfo 'Run $(emerge -va -UNDu @world) for the next step.'
 }

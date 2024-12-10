@@ -1,12 +1,6 @@
-# Kernel, the 'linux-firmware' should be emerge firstly for UKI ucode:
-#  1. 'USE=-dist-kernel emerge -av sys-kernel/linux-firmware'
-#  2. 'emerge -av sys-kernel/gentoo-linux'
-sys-kernel/linux-firmware
-sys-kernel/gentoo-kernel
-sys-kernel/installkernel
-
 # Core system
-pygoscelis-papua/portage:${SLOT_HOST}
+pygoscelis-papua/portage:${SLOT_MACH}
+pygoscelis-papua/installkernel
 sys-fs/btrfs-progs
 
 # Language tools
@@ -31,12 +25,12 @@ dev-debug/strace
 dev-util/perf
 dev-debug/bpftrace
 app-shells/fish
-pygoscelis-papua/fish:${SLOT_HOST}
+pygoscelis-papua/fish
 app-shells/fzf
 app-shells/zoxide
 app-editors/nano
 app-editors/helix
-pygoscelis-papua/helix:${SLOT_HOST}
+pygoscelis-papua/helix
 sys-apps/bat
 app-arch/7zip
 

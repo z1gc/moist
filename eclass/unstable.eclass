@@ -75,4 +75,28 @@ unstable_mnstable() {
 	fi
 }
 
+# Directory format: files/{use}/{filter}/...
+# Before calling the function, make sure `unstable_mnstable` is called before.
+use_directory() {
+	local filter="$1"
+
+	for comp in "${FILESDIR}/"*; do
+		local name="$(basename "${comp}")"
+		case "${name}" in
+		"unstable"|"${MNSTABLE[0]}")
+			# defaults to use
+		;;
+		*)
+			use "${name}" || continue
+		;;
+		esac
+
+		if [[ ! -e "${comp}/${filter}" ]]; then
+			continue
+		fi
+
+		echo "${comp}/${filter}"
+	done
+}
+
 fi

@@ -52,6 +52,7 @@ This may work.
 ## Next Step
 
 * [ ] Simplify the build steps more...
+* [ ] Make a snapshot after full installation, and make Gento persists.
 * [ ] Don't send BUGs to Gentoo developers, it's kind of my personal flavor.
 
 ## FAQ or Notes

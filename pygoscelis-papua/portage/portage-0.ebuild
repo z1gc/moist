@@ -21,41 +21,6 @@ BDEPEND="app-portage/cpuid2cpuflags"
 
 S="${WORKDIR}"
 
-# Directory format:
-#   pygoscelis-papua/portage/files/{use}/{rest}
-#
-# For machine, the {rest} part should contains:
-#   /use: The USE flags that it's using
-#   /user: The main user that unstable controls (TODO: Multiuser?)
-# Machine is also an USE, although it never shows up in the IUSE.
-#
-# And the common {rest} part:
-#   /world: What this USE brings up to the world.
-#   /profile: This USE will require the eselect profile.
-#   /make.conf, ...: /etc/portage, @see src_install.
-
-use_directory() {
-	local filter="$1"
-
-	for comp in "${FILESDIR}/"*; do
-		local name="$(basename "${comp}")"
-		case "${name}" in
-		"unstable"|"${MNSTABLE}")
-			# defaults to use
-		;;
-		*)
-			use "${name}" || continue
-		;;
-		esac
-
-		if [[ ! -e "${comp}/${filter}" ]]; then
-			continue
-		fi
-
-		echo "${comp}/${filter}"
-	done
-}
-
 src_compile() {
 	unstable_mnstable
 
@@ -87,7 +52,15 @@ src_install() {
 	insinto "/etc/portage/package.use"
 	doins "mnstable" "cpuflags" || die
 
-	# TODO: Merge into one directory before install?
+	# For machine, the {rest} part should contains:
+	#   /use: The USE flags that it's using
+	#   /user: The main user that unstable controls (TODO: Multiuser?)
+	# Machine is also an USE, although it never shows up in the IUSE.
+	#
+	# And the common {rest} part:
+	#   /world: What this USE brings up to the world.
+	#   /profile: This USE will require the eselect profile.
+	#   /make.conf, ...: /etc/portage
 	insinto "/etc/portage"
 	for comp in $(use_directory "binrepos.conf") \
 							$(use_directory "make.conf") \

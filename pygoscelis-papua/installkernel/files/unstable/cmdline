@@ -1,0 +1,5 @@
+root=${ROOTFS}
+rootfstype=btrfs
+rootflags=subvolid=${SUBVOLID}
+lsm=capability,yama,integrity,landlock
+systemd.gpt_auto=0

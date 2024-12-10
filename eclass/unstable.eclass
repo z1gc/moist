@@ -9,6 +9,10 @@ esac
 if [[ -z "${_UNSTABLE_ECLASS}" ]]; then
 _UNSTABLE_ECLASS=1
 
+# Exported, for indentifing the really MNSTABLE, we can't do much dynamic in
+# the ebuild system.
+USESTABLE=()
+
 # Setup the IUSE with all possible machines and users. In portage, the IUSE
 # should be a "fixed" string for sourcing, therefore it's value must be
 # calculated before everything else.
@@ -22,18 +26,20 @@ _UNSTABLE_REPO="${_UNSTABLE_REPO%/*}"
 for _UNSTABLE_F in "${_UNSTABLE_REPO}/pygoscelis-papua/portage/files/"*; do
 	if [[ -f "${_UNSTABLE_F}/use" ]]; then
 		_UNSTABLE_M="${_UNSTABLE_F##*/}"
+		IUSE+=" mnstable_${_UNSTABLE_M}"
+
 		if [[ "${_UNSTABLE_M}" == "${MNSTABLE}" ]]; then
 			# For the initial setup, the (default) $MNSTABLE is from environment.
-			_UNSTABLE_P="+"
+			for _UNSTABLE_U in $(< "${_UNSTABLE_F}/use"); do
+				IUSE+=" +${_UNSTABLE_U}"
+				USESTABLE+=("${_UNSTABLE_U}")
+			done
 		else
 			# For follwing setup, the $MNSTABLE is came from the package.use.
-			_UNSTABLE_P=""
+			for _UNSTABLE_U in $(< "${_UNSTABLE_F}/use"); do
+				IUSE+=" ${_UNSTABLE_U}"
+			done
 		fi
-
-		IUSE+=" mnstable_${_UNSTABLE_M}"
-		for _UNSTABLE_U in $(< "${_UNSTABLE_F}/use"); do
-			IUSE+=" ${_UNSTABLE_P}${_UNSTABLE_U}"
-		done
 	fi
 done
 
@@ -56,9 +62,9 @@ unstable_mnstable() {
 
 	for u in ${IUSE}; do
 		if [[ "${u}" == "unstable_"* ]]; then
-			UNSTABLE+=( "${u#unstable_}" )
+			UNSTABLE+=("${u#unstable_}")
 		elif [[ "${u}" == "mnstable_"* ]]; then
-			MNSTABLE+=( "${u#mnstable_}" )
+			MNSTABLE+=("${u#mnstable_}")
 		fi
 	done
 

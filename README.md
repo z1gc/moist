@@ -34,6 +34,9 @@ emerge -va -UNDu @world
 reboot
 ```
 
+If anything inside `pygoscelis-papua/portage` is changed, you'd better re-merge
+it as well :O
+
 Notice Gentoo will [cache the USE flags](https://devmanual.gentoo.org/general-concepts/portage-cache/index.html),
 and since the USE flags in unstable are generated at the run-time, it will lead
 portage selecting wrong USE flags when `MNSTABLE=` or `UNSTABLE=` is being
@@ -48,7 +51,8 @@ This may work.
 
 ## Next Step
 
-[ ] Simplify the build steps more...
+* [ ] Simplify the build steps more...
+* [ ] Don't send BUGs to Gentoo developers, it's kind of my personal flavor.
 
 ## Testing
 

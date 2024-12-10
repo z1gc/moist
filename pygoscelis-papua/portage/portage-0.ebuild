@@ -68,8 +68,8 @@ src_compile() {
 	# Setting both MNSTABLE and UNSTABLE for portage, to avoid inconsistency when
 	# upgrading through emerge.
 	# TODO: Place the special portage to other places?
-	( echo "pygoscelis-papua/portage MNSTABLE: ${MNSTABLE[*]} UNSTABLE: ${UNSTABLE[*]}"
-		echo "pygoscelis-papua/* MNSTABLE: ${MNSTABLE[*]}"
+	( echo "pygoscelis-papua/* ${USESTABLE[*]} MNSTABLE: ${MNSTABLE[*]}"
+		echo "pygoscelis-papua/portage UNSTABLE: ${UNSTABLE[*]}"
 		echo "aptenodytes-forsteri/* UNSTABLE: ${UNSTABLE[*]}"
 	) > "mnstable"
 

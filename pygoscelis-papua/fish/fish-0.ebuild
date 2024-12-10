@@ -1,5 +1,7 @@
 EAPI="8"
 
+inherit unstable
+
 SLOT="0"
 KEYWORDS="amd64 arm64"
 S="${WORKDIR}"
@@ -9,17 +11,18 @@ S="${WORKDIR}"
 # TODO: Fish plugins here.
 DEPEND="
 	app-shells/fish
+	app-sheels/fish-autols
 	app-shells/zoxide
 	app-portage/command-not-found
 "
 RDEPEND="${DEPEND}"
 
-pkg_preinst() {
-	# Try to ignore the annoying `dispatch-conf`.
-	rm -f "/etc/fish/config.fish"
-}
-
 src_install() {
 	insinto "/etc/fish"
 	doins -r "${FILESDIR}/." || die
+}
+
+pkg_preinst() {
+	# Try to ignore the annoying `dispatch-conf`.
+	rm_if_diff -f "/etc/fish/config.fish"
 }

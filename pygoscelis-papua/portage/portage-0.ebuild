@@ -80,15 +80,6 @@ src_install() {
 	doins "wheel" || die
 }
 
-rm_if_diff() {
-	local target="$1"
-
-	if ! diff -q "${target}" "${D}${target}"; then
-		ewarn "Replacing conflict: ${target}"
-		rm -f "${target}"
-	fi
-}
-
 pkg_preinst() {
 	# remove existing files, don't want an extra dispatch-conf
 	rm_if_diff /etc/portage/binrepos.conf/gentoobinhost.conf

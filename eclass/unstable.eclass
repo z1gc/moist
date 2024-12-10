@@ -99,4 +99,14 @@ use_directory() {
 	done
 }
 
+# No need to prepare anything.
+rm_if_diff() {
+	local target="$1"
+
+	if ! diff -q "${target}" "${D}${target}"; then
+		ewarn "Replacing conflict: ${target}"
+		rm -f "${target}"
+	fi
+}
+
 fi

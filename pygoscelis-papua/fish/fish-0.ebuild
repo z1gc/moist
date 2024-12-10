@@ -11,7 +11,9 @@ S="${WORKDIR}"
 # TODO: Fish plugins here.
 DEPEND="
 	app-shells/fish
-	app-sheels/fish-autols
+	app-shells/fish-autols
+	app-shells/fish-fzf
+	app-shells/fish-upto
 	app-shells/zoxide
 	app-portage/command-not-found
 "

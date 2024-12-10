@@ -6,3 +6,5 @@ dev-util/bash-language-server ~amd64
 # 9999 Live:
 app-editors/helix **
 app-shells/fish-autols **
+app-shells/fish-fzf **
+app-shells/fish-upto **

@@ -1,11 +1,9 @@
 # TODO: split gnome part?
 # TODO: cross compile gcc?
 
-app-editors/kakoune
 app-i18n/ibus-rime
 app-i18n/librime-lua
 app-misc/ddcutil
-app-office/drawio-desktop-bin
 dev-debug/gdb
 dev-debug/valgrind
 dev-go/gopls
@@ -32,12 +30,7 @@ media-video/pipewire
 net-misc/freerdp
 sys-apps/moreutils
 sys-apps/openrazer
-sys-devel/crossdev
 sys-devel/lld
 sys-devel/ra-multiplex
 sys-kernel/gentoo-kernel
 www-client/brave-bin
-x11-apps/xev
-
-aptenodytes-forsteri/gnome:${SLOT_USER}
-aptenodytes-forsteri/rime-ice:${SLOT_USER}

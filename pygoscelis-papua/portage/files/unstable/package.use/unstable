@@ -1,3 +1,4 @@
+# Kernel, Bootloader, UKI:
 sys-kernel/installkernel systemd-boot uki ukify
 sys-apps/systemd boot ukify
 
@@ -7,3 +8,17 @@ sys-apps/systemd boot ukify
 # (Don't know if the dist-kernel has impact on installkernel? I'm still willing
 #  to have a installkernel hook after the linux-firmware is updated).
 sys-kernel/linux-firmware -dist-kernel
+
+# No-more-rustup:
+dev-lang/rust-bin clippy rust-analyzer rustfmt rust-src
+
+# Network requirements for container or else:
+net-firewall/iptables nftables
+net-dns/dnsmasq script
+net-libs/gnutls tools pkcs11
+sys-apps/util-linux caps
+net-misc/spice-gtk usbredir
+
+# Force source-to-binary, we can't set per-package FEATURES currently:
+net-misc/openssh verify-sig
+dev-util/ccache verify-sig

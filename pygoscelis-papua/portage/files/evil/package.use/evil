@@ -1,0 +1,6 @@
+# Not so geek Desktop:
+gnome-base/nautilus -previewer
+media-video/pipewire sound-server
+kde-apps/okular epub mobi markdown
+media-libs/freetype harfbuzz
+app-i18n/librime-lua LUA_SINGLE_TARGET: lua5-4

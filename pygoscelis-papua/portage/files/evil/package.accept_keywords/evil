@@ -1,0 +1,12 @@
+# Testing Beta:
+dev-util/lua-language-server ~amd64
+app-i18n/ibus ~amd64
+app-i18n/ibus-rime ~amd64
+app-i18n/librime ~amd64
+app-i18n/librime-lua ~amd64
+media-fonts/sarasa-gothic ~amd64
+dev-util/jetbrains-toolbox ~amd64
+
+# 9999 Live:
+sys-apps/openrazer **
+sys-devel/ra-multiplex **

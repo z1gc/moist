@@ -54,6 +54,13 @@ This may work.
 * [ ] Simplify the build steps more...
 * [ ] Don't send BUGs to Gentoo developers, it's kind of my personal flavor.
 
+## FAQ or Notes
+
+If you're switching profile, such as from systemd to gnome/systemd, you may
+encounter [the circular dependencies](https://wiki.gentoo.org/wiki/Portage/Help/Circular_dependencies#harfbuzz_and_freetype)
+problem, which is kind of annoying, and should be fix before you upgrade the
+whole `@world` :/
+
 ## Testing
 
 I'm using `podman` for testing if configuration is correct,

@@ -1,2 +1,8 @@
-app-shells/fish-autols **
+# Testing Beta:
+dev-vcs/gitoxide ~amd64
 app-shells/zoxide ~amd64
+dev-util/bash-language-server ~amd64
+
+# 9999 Live:
+app-editors/helix **
+app-shells/fish-autols **

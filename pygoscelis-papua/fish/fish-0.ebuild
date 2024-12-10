@@ -3,12 +3,11 @@ EAPI="8"
 inherit unstable
 
 SLOT="0"
-KEYWORDS="amd64 arm64"
+KEYWORDS="amd64"
 S="${WORKDIR}"
 
 # > Items which are in RDEPEND but not DEPEND could in theory be merged after
 #   the target package. Portage does not currently do this.
-# TODO: Fish plugins here.
 DEPEND="
 	app-shells/fish
 	app-shells/fish-autols

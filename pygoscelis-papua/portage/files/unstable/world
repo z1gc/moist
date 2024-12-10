@@ -28,7 +28,6 @@ pygoscelis-papua/fish
 app-shells/fzf
 app-shells/zoxide
 app-editors/nano
-app-editors/helix
 pygoscelis-papua/helix
 sys-apps/bat
 app-arch/7zip

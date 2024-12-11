@@ -26,7 +26,7 @@ system_postinst() {
 
 	# Make sure the systemd's clean.
 	systemctl list-unit-files --state enabled | awk '$1 ~ /.+\..+/ {print $1}' \
-		| xargs systemctl disable || die
+		| xargs -r systemctl disable || die
 
 	# find presets: systemctl list-unit-files
 	systemctl preset getty@.service \
@@ -65,15 +65,15 @@ user_postinst() {
 
 		# won't double quote the $systemctl, we let it escape:
 		${systemctl} list-unit-files --state enabled | awk '$1 ~ /.+\..+/ {print $1}' \
-			| xargs ${systemctl} disable || die
+			| xargs -r ${systemctl} disable || die
 
-		${systemctl} "${usr}@" preset pipewire.service \
-												 pipewire.socket \
-												 pipewire-pulse.service \
-												 pipewire-pulse.socket \
-												 wireplumber.service \
-												 systemd-tmpfiles-setup.service \
-												 systemd-tmpfiles-clean.timer || die
+		${systemctl} preset pipewire.service \
+								 pipewire.socket \
+								 pipewire-pulse.service \
+								 pipewire-pulse.socket \
+								 wireplumber.service \
+								 systemd-tmpfiles-setup.service \
+								 systemd-tmpfiles-clean.timer || die
 	done
 }
 

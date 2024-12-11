@@ -28,10 +28,12 @@ function add_repo() {
   local spec="/etc/portage/repos.conf/$append.conf"
   local target="/var/db/repos/$name"
 
-  if [[ -f "$target" ]]; then
+  if [[ -d "$target" ]]; then
     echo "repo $name exists"
     return
   fi
+
+  mkdir -p "/etc/portage/repos.conf"
 
   if $is_main; then
     echo "# template: /usr/share/portage/config/repos.conf
@@ -66,7 +68,7 @@ sync-webrsync-verify-signature = yes" >> "$spec"
 # emerge repo, they will be overwritten by pygoscelis-papau/portage
 add_repo "gentoo" "gentoo" "https://mirrors.ustc.edu.cn/gentoo.git" true
 add_repo "unstable" "unstable" "https://github.com/z1gc/unstable.git" false
-add_repo "unstable" "gentoo-zh" "https://mirrors.cqu.edu.cn/gentoo-zh.git" false
+add_repo "unstable" "gentoo-zh" "https://github.com/microcai/gentoo-zh.git" false
 add_repo "unstable" "guru" "https://github.com/gentoo-mirror/guru.git" false
 
 # cleanup

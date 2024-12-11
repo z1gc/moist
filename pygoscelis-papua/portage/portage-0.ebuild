@@ -62,12 +62,9 @@ src_install() {
 	#   /profile: This USE will require the eselect profile.
 	#   /make.conf, ...: /etc/portage
 	insinto "/etc/portage"
-	for comp in $(use_directory "binrepos.conf") \
-							$(use_directory "make.conf") \
-							$(use_directory "package.accept_keywords") \
-							$(use_directory "package.license") \
-							$(use_directory "package.use") \
-							$(use_directory "repos.conf")
+	for comp in $(use_directory "binrepos.conf" "make.conf" \
+															"package.accept_keywords" "package.license" \
+															"package.use" "patches" "repos.conf")
 	do
 		doins -r "${comp}" || die
 	done

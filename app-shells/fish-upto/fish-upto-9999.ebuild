@@ -6,9 +6,12 @@ SLOT="0"
 KEYWORDS="~amd64"
 LICENSE="MIT"
 
+DEPEND="app-shells/fish"
+RDEPEND="${DEPEND}"
+
 EGIT_REPO_URI="https://github.com/Markcial/upto.git"
 
 src_install() {
-  insinto "/etc/fish"
-  doins -r "completions" "functions"
+	insinto "/etc/fish"
+	doins -r "completions" "functions"
 }

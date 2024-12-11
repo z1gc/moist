@@ -9,11 +9,13 @@ S="${WORKDIR}"
 # > Items which are in RDEPEND but not DEPEND could in theory be merged after
 #   the target package. Portage does not currently do this.
 DEPEND="
-	app-shells/fish
 	app-shells/fish-autols
 	app-shells/fish-fzf
 	app-shells/fish-upto
 	app-shells/zoxide
+	sys-apps/fd
+	sys-apps/ripgrep
+	app-arch/7zip
 	app-portage/command-not-found
 "
 RDEPEND="${DEPEND}"

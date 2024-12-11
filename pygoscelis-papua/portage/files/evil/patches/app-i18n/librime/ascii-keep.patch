@@ -1,0 +1,93 @@
+diff --git a/src/rime/gear/ascii_composer.cc b/src/rime/gear/ascii_composer.cc
+index a9e333b9..029343b2 100644
+--- a/src/rime/gear/ascii_composer.cc
++++ b/src/rime/gear/ascii_composer.cc
+@@ -56,11 +56,15 @@ AsciiComposer::~AsciiComposer() {
+ }
+ 
+ ProcessResult AsciiComposer::ProcessKeyEvent(const KeyEvent& key_event) {
+-  if ((key_event.shift() && key_event.ctrl()) || key_event.alt() ||
+-      key_event.super()) {
++  Context* ctx = engine_->context();
++
++  if ((key_event.shift() && key_event.ctrl()) || key_event.ctrl() ||
++      key_event.alt() || key_event.super()) {
+     shift_key_pressed_ = ctrl_key_pressed_ = false;
++    ctx->commit_history().clear();
+     return kNoop;
+   }
++
+   if (caps_lock_switch_style_ != kAsciiModeSwitchNoop) {
+     ProcessResult result = ProcessCapsLock(key_event);
+     if (result != kNoop)
+@@ -108,8 +112,68 @@ ProcessResult AsciiComposer::ProcessKeyEvent(const KeyEvent& key_event) {
+   if (key_event.ctrl() || (key_event.shift() && ch == XK_space)) {
+     return kNoop;
+   }
+-  Context* ctx = engine_->context();
+-  bool ascii_mode = ctx->get_option("ascii_mode");
++
++  bool ascii_mode = true;
++  const string& latest = ctx->commit_history().latest_text();
++  int i;
++
++  /*
++   * 配合 en_commit，如果上一个词是英文，但是输入到一半的时候，那么只有当这次
++   * 输入的是非英文字符时才会停止。
++   * 例如想输入“commit”，但是输入到“comm”时输入法就已经提交了（en_commit）。
++   */
++  if (latest.empty())
++    goto ac_noop;
++
++  /*
++   * IBus has a `get_surrounding_text` method to obtain the inputed texts.
++   * However, it needs the client's support (using accessibility), thus it's
++   *  not very reliable.
++   * TODO: When the world gets better?
++   */
++
++  if (32 <= ch && ch <= 126) {
++    // Special keys, and the toggle keys (e.g. space) is ignored:
++    switch (ch) {
++      case 32 /* keySpace */:
++      case 34 /* key" */:
++      case 40 /* key( */:
++      case 41 /* key) */:
++      case 44 /* key, */:
++      case 92 /* key\ */:
++      case 96 /* key` */:
++      case 126 /* key~ */:
++        goto ac_noop;
++    }
++
++    // From: 'en_spacer.lua', TODO: optimize? e.g. compile the regex?
++    // Some keys will be commited to the commit_history (when returns 2),
++    //  therefore we need to make them continues somehow (e.g. "->").
++    for (i = 0; i < latest.size(); ++i) {
++      // TODO: unsure what character will get into the commit history?
++      switch (latest[i]) {
++        case 'a' ... 'z':
++        case 'A' ... 'Z':
++        case '0' ... '9':
++        case '$':
++        case '\'':
++        case '/':
++        case '-':
++        case '_':
++        case '.':
++          continue;
++        default:
++          ascii_mode = false;
++          break;
++      }
++    }
++
++    if (ascii_mode)
++      return kRejected;
++  }
++
++ac_noop:
++  ascii_mode = ctx->get_option("ascii_mode");
+   if (ascii_mode) {
+     if (!ctx->IsComposing()) {
+       return kRejected;  // direct commit

@@ -1,14 +1,11 @@
 # Core system
-pygoscelis-papua/portage:${SLOT_MACH}
+pygoscelis-papua/portage
 pygoscelis-papua/installkernel
 sys-fs/btrfs-progs
 
 # Language tools
 dev-util/ccache
-sys-devel/clang
-dev-python/python-lsp-server
 dev-python/mypy
-dev-util/bash-language-server
 dev-util/shellcheck-bin
 
 # Portage
@@ -18,19 +15,12 @@ app-portage/pfl
 app-portage/command-not-found
 
 # SRE
-sys-apps/fd
-sys-apps/ripgrep
+pygoscelis-papua/fish
+pygoscelis-papua/helix
 sys-process/iotop-c
 dev-debug/strace
 dev-util/perf
 dev-debug/bpftrace
-pygoscelis-papua/fish
-app-shells/fzf
-app-shells/zoxide
-app-editors/nano
-pygoscelis-papua/helix
-sys-apps/bat
-app-arch/7zip
 
 # Version control
 dev-vcs/repo

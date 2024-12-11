@@ -6,9 +6,12 @@ SLOT="0"
 KEYWORDS="amd64"
 S="${WORKDIR}"
 
-# TODO: Language servers here?
+# Language servers here as well:
 DEPEND="
 	app-editors/helix
+	sys-devel/clang
+	dev-python/python-lsp-server
+	dev-util/bash-language-server
 "
 RDEPEND="${DEPEND}"
 

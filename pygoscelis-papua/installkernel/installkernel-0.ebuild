@@ -11,7 +11,11 @@ DEPEND="
 	sys-kernel/gentoo-kernel
 "
 RDEPEND="${DEPEND}"
-BDEPEND="sys-fs/btrfs-progs"
+BDEPEND="
+	sys-fs/btrfs-progs
+	sys-apps/util-linux
+	sys-devel/gettext
+"
 
 S="${WORKDIR}"
 

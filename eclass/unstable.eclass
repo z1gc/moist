@@ -79,10 +79,8 @@ unstable_mnstable() {
 # Before calling the function, make sure `unstable_mnstable` is called before.
 use_directory() {
 	if [[ ${#UNSTABLE[@]} -eq 0 ]]; then
-		die 'Please call `unstable_mnstable` firstly'
+		die 'Please call $(unstable_mnstable) first!'
 	fi
-
-	local filter="$1"
 
 	for comp in "${FILESDIR}/"*; do
 		local name="$(basename "${comp}")"
@@ -95,11 +93,13 @@ use_directory() {
 		;;
 		esac
 
-		if [[ ! -e "${comp}/${filter}" ]]; then
-			continue
-		fi
+		for filter in "${@}"; do
+			if [[ ! -e "${comp}/${filter}" ]]; then
+				continue
+			fi
 
-		echo "${comp}/${filter}"
+			echo "${comp}/${filter}"
+		done
 	done
 }
 

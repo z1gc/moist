@@ -4,7 +4,6 @@ inherit unstable
 
 SLOT="0"
 KEYWORDS="amd64"
-S="${WORKDIR}"
 
 # Language servers here as well:
 # TODO: Split clang? And other wrappers?

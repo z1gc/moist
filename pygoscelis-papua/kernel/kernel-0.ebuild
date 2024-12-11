@@ -5,10 +5,10 @@ inherit unstable
 SLOT="0"
 KEYWORDS="amd64"
 
-# Should setup the installkernel firstly, then merge the gentoo kernel.
-# TODO: Will this order be determined?
+# The order of merging isn't deterministic, therefore we can't make any
+# assumptions.
 DEPEND="
-	pygoscelis-papua/installkernel
+	aptenodytes-forsteri/ccache
 	sys-kernel/gentoo-kernel
 "
 RDEPEND="${DEPEND}"

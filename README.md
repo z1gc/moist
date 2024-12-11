@@ -20,6 +20,14 @@ pygoscelis-papua/portage MNSTABLE: evil
 aptenodytes-forsteri/gnome UNSTABLE: byte
 ```
 
+The `pygoscelis-papua` group is mainly a meta-package contains most of what you
+need.
+
+The `aptenodytes-forsteri` group is small components, like your dotfiles or
+the things that needs by `pygoscelis-papua`.
+
+Relation is `world` contains `pygoscelis-papua` contains `aptenodytes-forsteri`.
+
 ## Stages Design
 
 For new build:

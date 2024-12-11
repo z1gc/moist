@@ -2,10 +2,8 @@
 pygoscelis-papua/portage
 pygoscelis-papua/kernel
 pygoscelis-papua/systemd
-aptenodytes-forsteri/systemd
 
 # Development
-pygoscelis-papua/ccache
 dev-python/mypy
 dev-util/shellcheck-bin
 dev-debug/gdb
@@ -18,9 +16,6 @@ app-portage/pfl
 app-portage/command-not-found
 
 # SRE
-pygoscelis-papua/fish
-pygoscelis-papua/helix
-aptenodytes-forsteri/bash
 sys-process/iotop-c
 dev-debug/strace
 dev-util/perf

@@ -1,6 +1,8 @@
 # This ebuild only configures the portage, setting up what packages will be
 # installed, and what USE should be choosed depend on hostname.
 #
+# Hmmm, it also configures the installkernel, to avoid wrong dependency...
+#
 # TabSize=2
 
 EAPI="8"
@@ -10,7 +12,12 @@ inherit unstable
 KEYWORDS="amd64"
 SLOT="0"
 
-DEPEND="app-admin/sudo"
+# To ensure the installkernel configurations set up, we make it depends.
+# TODO: it makes merging this package a little bit harder for testing.
+DEPEND="
+	app-admin/sudo
+	aptenodytes-forsteri/installkernel
+"
 RDEPEND="${DEPEND}"
 BDEPEND="app-portage/cpuid2cpuflags"
 

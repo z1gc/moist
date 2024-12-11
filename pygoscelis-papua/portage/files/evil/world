@@ -26,5 +26,4 @@ media-video/pipewire
 net-misc/freerdp
 sys-apps/moreutils
 sys-apps/openrazer
-sys-devel/lld
 www-client/brave-bin

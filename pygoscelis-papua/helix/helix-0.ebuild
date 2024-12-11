@@ -7,9 +7,10 @@ KEYWORDS="amd64"
 S="${WORKDIR}"
 
 # Language servers here as well:
+# TODO: Split clang? And other wrappers?
 DEPEND="
 	app-editors/helix
-	sys-devel/clang
+	aptenodytes-forsteri/clang
 	dev-python/python-lsp-server
 	dev-util/bash-language-server
 	dev-go/gopls

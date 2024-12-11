@@ -69,6 +69,8 @@ src_compile() {
 }
 
 src_install() {
+	unstable_mnstable
+
 	insinto "/etc/kernel"
 	doins "${FILESDIR}/unstable/install.conf" "cmdline"
 	for comp in $(use_directory "config.d"); do

@@ -78,6 +78,10 @@ unstable_mnstable() {
 # Directory format: files/{use}/{filter}/...
 # Before calling the function, make sure `unstable_mnstable` is called before.
 use_directory() {
+	if [[ ${#UNSTABLE[@]} -eq 0 ]]; then
+		die 'Please call `unstable_mnstable` firstly'
+	fi
+
 	local filter="$1"
 
 	for comp in "${FILESDIR}/"*; do

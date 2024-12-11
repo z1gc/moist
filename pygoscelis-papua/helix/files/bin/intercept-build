@@ -1,0 +1,35 @@
+#!/usr/bin/env python3
+# From intercept-build, in gentoo, the libscanbuild is within lib64 directory,
+#  instead of the real lib dir.
+# TODO: When gentoo or LLVM fixed this, the script will be unneccessary.
+
+import os
+import logging
+import multiprocessing
+import sys
+
+this_dir = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(os.path.dirname(this_dir), "lib"))
+
+if __name__ == "__main__":
+    # Locate the real LLVM's dir:
+    this = os.path.realpath(__file__)
+    base = os.path.basename(this)
+
+    for path in os.environ["PATH"].split(":"):
+        that = os.path.join(path, base)
+        if that != this and os.path.isfile(that):
+            break
+    else:
+        logging.error("No %s found!", base)
+        exit(-1)
+
+    # llvm/18
+    #         bin/intercept-build
+    #         lib/libscanbuild
+    lib64 = os.path.join(os.path.dirname(os.path.dirname(that)), "lib64")
+    sys.path.append(lib64)
+    from libscanbuild.intercept import intercept_build
+
+    multiprocessing.freeze_support()
+    sys.exit(intercept_build())

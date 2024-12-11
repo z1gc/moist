@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Preventing recursive:
+DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+PATH="${PATH//$DIR/}"
+export PATH="$PATH"
+
+# If there's server, we use it instead:
+if pgrep -f "ra-multiplex.+server" &>/dev/null; then
+  exec ra-multiplex "$@"
+fi
+
+# If "server" request, we start it:
+if [[ "$*" == *"server"* ]]; then
+  export SERVER_ARGS=""
+  exec ra-multiplex "$@"
+fi
+
+exec rust-analyzer "$@"

@@ -20,5 +20,9 @@ RDEPEND="${DEPEND}"
 
 src_install() {
 	insinto "/etc/helix"
-	doins -r "${FILESDIR}/." || die
+	doins -r "${FILESDIR}/etc/." || die
+
+	# Some custom wrappers:
+	exeinto "/usr/local/bin"
+	doexe -r "${FILESDIR}/bin/." || die
 }

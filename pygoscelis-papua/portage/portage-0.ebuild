@@ -30,7 +30,7 @@ src_compile() {
 	# TODO: Place the special portage to other places?
 	( echo "pygoscelis-papua/* ${USESTABLE[*]} MNSTABLE: ${MNSTABLE[*]}"
 		echo "pygoscelis-papua/portage UNSTABLE: ${UNSTABLE[*]}"
-		echo "aptenodytes-forsteri/* UNSTABLE: ${UNSTABLE[*]}"
+		echo "aptenodytes-forsteri/* ${USESTABLE[*]} UNSTABLE: ${UNSTABLE[*]}"
 	) > "mnstable"
 
 	# https://wiki.gentoo.org/wiki/CPU_FLAGS_*

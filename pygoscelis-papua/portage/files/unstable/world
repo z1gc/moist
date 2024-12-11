@@ -5,7 +5,7 @@ pygoscelis-papua/systemd
 aptenodytes-forsteri/systemd
 
 # Development
-pygoscelis-papus/ccache
+pygoscelis-papua/ccache
 dev-python/mypy
 dev-util/shellcheck-bin
 dev-debug/gdb

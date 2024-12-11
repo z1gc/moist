@@ -19,6 +19,7 @@ app-portage/command-not-found
 # SRE
 pygoscelis-papua/fish
 pygoscelis-papua/helix
+aptenodytes-forsteri/bash
 sys-process/iotop-c
 dev-debug/strace
 dev-util/perf

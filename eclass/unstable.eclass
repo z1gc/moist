@@ -117,4 +117,24 @@ rm_if_diff() {
 	fi
 }
 
+# Home manager functions, like https://devmanual.gentoo.org/function-reference/install-functions/
+# It combines with `insinto` and `doins`, for convenience.
+# TODO: suppress QA warnings, maybe $QA_FLAGS_IGNORED?
+homeinto() {
+	if [[ ${#UNSTABLE[@]} -eq 0 ]]; then
+		die 'Please call $(unstable_mnstable) first!'
+	fi
+
+	local target="${1}"
+	local op="${2}"
+	shift 2
+
+	for usr in "${UNSTABLE[@]}"; do
+		local home="$(eval echo "~${usr}" || die)"
+		insopts "-o${usr}" "-g${usr}" "-m644"
+		insinto "${home}/${target}"
+		HOME="${home}" "${op}" "${@}"
+	done
+}
+
 fi

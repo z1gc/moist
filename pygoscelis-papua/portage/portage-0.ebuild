@@ -74,6 +74,10 @@ src_install() {
 
 	insinto "/etc/sudoers.d"
 	doins "wheel" || die
+
+	# locale, TODO: to other ebuild?
+	insinto "/etc"
+	doins "${FILESDIR}/unstable/locale.gen"
 }
 
 pkg_preinst() {
@@ -89,9 +93,12 @@ pkg_postinst() {
 	for comp in $(use_directory "profile"); do
 		local profile="$(< "${comp}")"
 		ewarn "New eselect profile: ${profile}"
-		eselect profile set "${profile}"
+		eselect profile set "${profile}" || die
 		break
 	done
+
+	# locale
+	locale-gen || die
 
 	einfo 'Run $(emerge -va -UNDu @world) for the next step.'
 }

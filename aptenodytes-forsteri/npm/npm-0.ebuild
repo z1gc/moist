@@ -5,10 +5,10 @@ inherit unstable
 SLOT="0"
 KEYWORDS="amd64"
 
-DEPEND="app-shells/bash"
+DEPEND="net-libs/nodejs"
 RDEPEND="${DEPEND}"
 
 src_install() {
 	unstable_mnstable
-	homeinto "" newins "${FILESDIR}/bashrc" ".bashrc"
+	homeinto "" newins "${FILESDIR}/npmrc" ".npmrc"
 }

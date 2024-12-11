@@ -1,0 +1,4 @@
+# https://wiki.gentoo.org/wiki/Debugging
+CFLAGS="${CFLAGS} -ggdb3"
+CXXFLAGS="${CXXFLAGS} -ggdb3"
+FEATURES="${FEATURES} nostrip"

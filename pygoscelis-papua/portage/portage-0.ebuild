@@ -58,7 +58,6 @@ src_install() {
 	#
 	# And the common {rest} part:
 	#   /world: What this USE brings up to the world.
-	#   /profile: This USE will require the eselect profile.
 	#   /make.conf, ...: /etc/portage
 	insinto "/etc/portage"
 	for comp in $(use_directory "binrepos.conf" \
@@ -95,12 +94,13 @@ pkg_postinst() {
 	unstable_mnstable
 
 	# profile
-	for comp in $(use_directory "profile"); do
-		local profile="$(< "${comp}")"
-		ewarn "New eselect profile: ${profile}"
-		eselect profile set "${profile}" || die
-		break
-	done
+	local profile="default/linux/amd64/23.0/systemd"
+	if use "gnome"; then
+		profile="default/linux/amd64/23.0/desktop/gnome/systemd"
+	fi
+
+	ewarn "New eselect profile: ${profile}"
+	eselect profile set "${profile}" || die
 
 	# locale
 	locale-gen || die

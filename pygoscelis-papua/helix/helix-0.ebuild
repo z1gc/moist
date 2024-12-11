@@ -12,6 +12,9 @@ DEPEND="
 	sys-devel/clang
 	dev-python/python-lsp-server
 	dev-util/bash-language-server
+	dev-go/gopls
+	dev-util/lua-language-server
+	sys-devel/ra-multiplex
 "
 RDEPEND="${DEPEND}"
 

@@ -68,3 +68,6 @@ add_repo "gentoo" "gentoo" "https://mirrors.ustc.edu.cn/gentoo.git" true
 add_repo "unstable" "unstable" "https://github.com/z1gc/unstable.git" false
 add_repo "unstable" "gentoo-zh" "https://mirrors.cqu.edu.cn/gentoo-zh.git" false
 add_repo "unstable" "guru" "https://github.com/gentoo-mirror/guru.git" false
+
+# cleanup
+rm -f /tmp/gix

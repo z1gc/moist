@@ -4,13 +4,9 @@
 app-i18n/ibus-rime
 app-i18n/librime-lua
 app-misc/ddcutil
-dev-debug/gdb
-dev-debug/valgrind
-dev-go/gopls
 dev-java/openjdk
 dev-python/patch-ng
 dev-util/jetbrains-toolbox
-dev-util/lua-language-server
 dev-util/tree-sitter-cli
 gnome-base/dconf-editor
 gnome-base/gnome-light
@@ -31,5 +27,4 @@ net-misc/freerdp
 sys-apps/moreutils
 sys-apps/openrazer
 sys-devel/lld
-sys-devel/ra-multiplex
 www-client/brave-bin

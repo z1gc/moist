@@ -3,10 +3,12 @@ pygoscelis-papua/portage
 pygoscelis-papua/installkernel
 sys-fs/btrfs-progs
 
-# Language tools
+# Development
 dev-util/ccache
 dev-python/mypy
 dev-util/shellcheck-bin
+dev-debug/gdb
+dev-debug/valgrind
 
 # Portage
 app-portage/gentoolkit

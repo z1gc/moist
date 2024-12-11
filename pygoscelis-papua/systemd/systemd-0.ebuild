@@ -4,7 +4,11 @@ inherit unstable
 
 SLOT="0"
 KEYWORDS="amd64"
-DEPEND="sys-apps/systemd"
+
+DEPEND="
+	sys-apps/systemd
+	gnome? ( gnome-base/gnome-light )
+"
 RDEPEND="${DEPEND}"
 
 pkg_postinst() {
@@ -16,8 +20,15 @@ pkg_postinst() {
 		systemd-firstboot --hostname="${MNSTABLE}" --timezone="Asia/Shanghai" || die
 	fi
 
-	# systemctl list-unit-files --state=enabled
-	systemctl preset getty@tty1.service \
+	# TODO: elegant way?
+	local units="$(systemctl list-unit-files --state enabled \
+								 | awk '$1 ~ /.+\..+/ {print $1}')"
+	if [[ "${units}" != "" ]]; then
+		systemctl disable "${units}"
+	fi
+
+	# find presets: systemctl list-unit-files
+	systemctl preset getty@.service \
 									 systemd-boot-update.service \
 									 systemd-resolved.service \
 									 systemd-timesyncd.service \
@@ -29,9 +40,19 @@ pkg_postinst() {
 									 reboot.target \
 									 remote-fs.target || die
 
+	if use "gnome"; then
+		systemctl preset gdm.service \
+										 NetworkManager.service \
+										 NetworkManager-wait-online.service \
+										 NetworkManager-dispatcher.service || die
+	else
+		systemctl preset systemd-networkd.service \
+										 systemd-networkd-wait-online.service || die
+	fi
+
 	# Other services that is preset but keep them disabled:
 	# systemd-confext.service
 	# systemd-pstore.service
 	# systemd-sysext.service
-	# systemd-networkd.service
+	# systemd-network-generator.service
 }

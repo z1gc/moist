@@ -1,20 +1,11 @@
-# TODO: split gnome part?
 # TODO: cross compile gcc?
 
-app-i18n/ibus-rime
-app-i18n/librime-lua
 app-misc/ddcutil
 dev-java/openjdk
 dev-python/patch-ng
 dev-util/jetbrains-toolbox
 dev-util/tree-sitter-cli
-gnome-base/dconf-editor
-gnome-extra/gnome-tweaks
 gnome-extra/zenity
-gui-apps/wl-clipboard
-kde-apps/okular
-pygoscelis-papua/fonts-cjk
 net-misc/freerdp
 sys-apps/moreutils
 sys-apps/openrazer
-www-client/brave-bin

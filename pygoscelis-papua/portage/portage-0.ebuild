@@ -84,6 +84,7 @@ pkg_preinst() {
 	# remove existing files, don't want an extra dispatch-conf
 	rm_if_diff /etc/portage/binrepos.conf/gentoobinhost.conf
 	rm_if_diff /etc/portage/repos.conf/unstable.conf
+	rm_if_diff /etc/locale.gen
 }
 
 pkg_postinst() {

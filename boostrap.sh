@@ -45,7 +45,7 @@ main-repo = gentoo
   echo "[$name]
 location = $target
 sync-type = git
-sync-url = $uri" >> "$spec"
+sync-uri = $uri" >> "$spec"
 
   if $is_main; then
     echo "auto-sync = yes

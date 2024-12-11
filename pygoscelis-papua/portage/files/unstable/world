@@ -1,6 +1,6 @@
 # Core system
 pygoscelis-papua/portage
-pygoscelis-papua/installkernel
+pygoscelis-papua/kernel
 pygoscelis-papua/systemd
 aptenodytes-forsteri/systemd
 

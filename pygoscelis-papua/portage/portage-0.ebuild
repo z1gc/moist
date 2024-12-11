@@ -25,12 +25,10 @@ src_compile() {
 	done | sort > "world"
 	echo "" > "world_sets"
 
-	# Setting both MNSTABLE and UNSTABLE for portage, to avoid inconsistency when
-	# upgrading through emerge.
-	# TODO: Place the special portage to other places?
-	( echo "pygoscelis-papua/* ${USESTABLE[*]} MNSTABLE: ${MNSTABLE[*]}"
-		echo "pygoscelis-papua/portage UNSTABLE: ${UNSTABLE[*]}"
-		echo "aptenodytes-forsteri/* ${USESTABLE[*]} UNSTABLE: ${UNSTABLE[*]}"
+	# Share to everybody, huh, seems unneccessary to split two groups.
+	local u="${USESTABLE[*]} UNSTABLE: ${UNSTABLE[*]} MNSTABLE: ${MNSTABLE[*]}"
+	( echo "pygoscelis-papua/* ${u}"
+		echo "aptenodytes-forsteri/* ${u}"
 	) > "mnstable"
 
 	# https://wiki.gentoo.org/wiki/CPU_FLAGS_*

@@ -27,8 +27,8 @@ pkg_pretend() {
 
 src_compile() {
 	# cmdline based on btrfs subvolume, it should be like (btrfs subvolume list):
-	# > ID 256 gen 506217 top level 5 path @rootfs
-	# > ID 259 gen 508237 top level 256 path @rootfs/var
+	# > ID 256 gen 506217 top level 5 path @gentoo
+	# > ID 259 gen 508237 top level 256 path @gentoo/var
   # > ID 257 gen 506227 top level 5 path @home
   # > ID 258 gen 509452 top level 5 path @snapshots
 	# ...
@@ -45,7 +45,8 @@ src_compile() {
 	cp "${FILESDIR}/unstable/fstab" "fstab"
 	for subvol in "/" "/home"; do
 		# TODO: use blk uuid?
-		fsdev="$(findmnt --real -v -o SOURCE -n -M "${subvol}" || die)"
+		fsdev="$(findmnt --real -v -o SOURCE -n -M "${subvol}" \
+					   || die "Missing volume ${subvol}, is it really mounted?")"
 		subvolid="$(btrfs inspect-internal rootid "${subvol}" || die)"
 
 		if [[ "${subvol}" == "/" ]]; then
@@ -83,4 +84,13 @@ src_install() {
 
 	insinto "/etc"
 	doins "fstab"
+}
+
+pkg_preinst() {
+	rm_if_diff "/etc/fstab"
+}
+
+pkg_postinst() {
+	# only need once:
+	bootctl install || die
 }

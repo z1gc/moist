@@ -13,10 +13,9 @@ KEYWORDS="amd64"
 SLOT="0"
 
 # To ensure the installkernel configurations set up, we make it depends.
-# TODO: it makes merging this package a little bit harder for testing.
 DEPEND="
-	app-admin/sudo
 	aptenodytes-forsteri/installkernel
+	app-admin/sudo
 "
 RDEPEND="${DEPEND}"
 BDEPEND="app-portage/cpuid2cpuflags"

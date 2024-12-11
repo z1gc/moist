@@ -7,7 +7,6 @@ KEYWORDS="amd64"
 
 DEPEND="
 	sys-kernel/installkernel
-	sys-kernel/linux-firmware
 	sys-fs/btrfs-progs
 "
 RDEPEND="${DEPEND}"

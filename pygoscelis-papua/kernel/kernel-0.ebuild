@@ -7,8 +7,11 @@ KEYWORDS="amd64"
 
 # The order of merging isn't deterministic, therefore we can't make any
 # assumptions.
+# FIXME: It may leads to gentoo-kernel compilation failure when the dependencies
+# order is reversed.
 DEPEND="
 	aptenodytes-forsteri/ccache
+	sys-kernel/linux-firmware
 	sys-kernel/gentoo-kernel
 "
 RDEPEND="${DEPEND}"

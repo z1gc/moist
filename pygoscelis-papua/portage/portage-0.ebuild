@@ -1,8 +1,6 @@
 # This ebuild only configures the portage, setting up what packages will be
 # installed, and what USE should be choosed depend on hostname.
 #
-# Okay, I've lied, it also setup the systemd, that' all, really :O
-#
 # TabSize=2
 
 EAPI="8"
@@ -12,10 +10,7 @@ inherit unstable
 KEYWORDS="amd64"
 SLOT="0"
 
-DEPEND="
-	sys-apps/systemd
-	app-admin/sudo
-"
+DEPEND="app-admin/sudo"
 RDEPEND="${DEPEND}"
 BDEPEND="app-portage/cpuid2cpuflags"
 
@@ -62,9 +57,13 @@ src_install() {
 	#   /profile: This USE will require the eselect profile.
 	#   /make.conf, ...: /etc/portage
 	insinto "/etc/portage"
-	for comp in $(use_directory "binrepos.conf" "make.conf" \
-															"package.accept_keywords" "package.license" \
-															"package.use" "patches" "repos.conf")
+	for comp in $(use_directory "binrepos.conf" \
+															"make.conf" \
+															"package.accept_keywords" \
+															"package.license" \
+															"package.use" \
+															"patches" \
+															"repos.conf")
 	do
 		doins -r "${comp}" || die
 	done
@@ -93,13 +92,6 @@ pkg_postinst() {
 		eselect profile set "${profile}"
 		break
 	done
-
-	# systemd setup, TODO: ensure we have systemd at first?
-	if [[ ! -f /etc/machine-id ]]; then
-		systemd-machine-id-setup || die
-		systemd-firstboot --hostname="${MNSTABLE}" --timezone="Asia/Shanghai" || die
-		systemctl preset-all --preset-mode=enable-only || die
-	fi
 
 	einfo 'Run $(emerge -va -UNDu @world) for the next step.'
 }

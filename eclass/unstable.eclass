@@ -24,30 +24,34 @@ _UNSTABLE_REPO="${BASH_SOURCE[0]%/*}"
 _UNSTABLE_REPO="${_UNSTABLE_REPO%/*}"
 
 for _UNSTABLE_F in "${_UNSTABLE_REPO}/pygoscelis-papua/portage/files/"*; do
-	if [[ -f "${_UNSTABLE_F}/use" ]]; then
-		_UNSTABLE_M="${_UNSTABLE_F##*/}"
-		IUSE+=" mnstable_${_UNSTABLE_M}"
+	if [[ ! -f "${_UNSTABLE_F}/use" ]]; then
+		continue
+	fi
 
-		if [[ "${_UNSTABLE_M}" == "${MNSTABLE}" ]]; then
-			# For the initial setup, the (default) $MNSTABLE is from environment.
-			for _UNSTABLE_U in $(< "${_UNSTABLE_F}/use"); do
-				IUSE+=" +${_UNSTABLE_U}"
-				USESTABLE+=("${_UNSTABLE_U}")
-			done
-		else
-			# For follwing setup, the $MNSTABLE is came from the package.use.
-			for _UNSTABLE_U in $(< "${_UNSTABLE_F}/use"); do
-				IUSE+=" ${_UNSTABLE_U}"
-			done
-		fi
+	_UNSTABLE_M="${_UNSTABLE_F##*/}"
+	IUSE+=" mnstable_${_UNSTABLE_M}"
+
+	if [[ "${_UNSTABLE_M}" == "${MNSTABLE}" ]]; then
+		# For the initial setup, the (default) $MNSTABLE is from environment.
+		for _UNSTABLE_U in $(< "${_UNSTABLE_F}/use"); do
+			IUSE+=" +${_UNSTABLE_U}"
+			USESTABLE+=("${_UNSTABLE_U}")
+		done
+	else
+		# For follwing setup, the $MNSTABLE is came from the package.use.
+		for _UNSTABLE_U in $(< "${_UNSTABLE_F}/use"); do
+			IUSE+=" ${_UNSTABLE_U}"
+		done
 	fi
 done
 
-for _UNSTABLE_U in "${_UNSTABLE_REPO}/acct-user/"*; do
-	IUSE+=" unstable_${_UNSTABLE_U##*/}"
+for _UNSTABLE_F in "${_UNSTABLE_REPO}/acct-user/"*; do
+	_UNSTABLE_U="${_UNSTABLE_F##*/}"
+	IUSE+=" unstable_${_UNSTABLE_U}"
+	RDEPEND+=" unstable_${_UNSTABLE_U}? ( acct-user/${_UNSTABLE_U} )"
 done
 
-# Cleaning up something we won't let others to see:
+# Cleaning up something we don't want others to see:
 unset _UNSTABLE_F _UNSTABLE_M _UNSTABLE_P _UNSTABLE_U _UNSTABLE_REPO
 UNSTABLE=()
 MNSTABLE=()

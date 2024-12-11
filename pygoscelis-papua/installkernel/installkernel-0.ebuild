@@ -9,10 +9,10 @@ DEPEND="
 	sys-kernel/installkernel
 	sys-kernel/linux-firmware
 	sys-kernel/gentoo-kernel
+	sys-fs/btrfs-progs
 "
 RDEPEND="${DEPEND}"
 BDEPEND="
-	sys-fs/btrfs-progs
 	sys-apps/util-linux
 	sys-devel/gettext
 "

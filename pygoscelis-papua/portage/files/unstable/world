@@ -1,7 +1,8 @@
 # Core system
 pygoscelis-papua/portage
 pygoscelis-papua/installkernel
-sys-fs/btrfs-progs
+pygoscelis-papus/systemd
+aptenodytes-forsteri/systemd
 
 # Development
 dev-util/ccache

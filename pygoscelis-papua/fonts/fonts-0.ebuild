@@ -24,16 +24,10 @@ src_install() {
 }
 
 pkg_postinst() {
-	# Fonts are special, we handle EVERY fonts in here, for simplicity.
-	# TODO: Make a "unstable-service" or else to handle every systemd service as
-	#       well?
-	for config in $(eselect fontconfig list \
-									| awk '$3 == "*" && $2 ~ /\.conf$/ {print $2}')
-	do
-		eselect fontconfig disable "${config}" || die
-	done
+	eselect fontconfig list | awk '$3 == "*" && $2 ~ /\.conf$/ {print $2}' \
+		| xargs -r eselect fontconfig disable || die
 
-	# Re-enable what we want
+	# Enable what we want:
 	eselect fontconfig enable 10-hinting-slight.conf \
 														10-scale-bitmap-fonts.conf \
 														10-sub-pixel-bgr.conf \
@@ -46,6 +40,7 @@ pkg_postinst() {
 														50-user.conf \
 														51-local.conf \
 														60-generic.conf \
+														66-noto-cjk-sc.conf \
 														70-noto-cjk.conf \
 														75-noto-emoji-fallback.conf \
 														90-synthetic.conf || die

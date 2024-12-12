@@ -5,7 +5,10 @@ inherit unstable
 SLOT="0"
 KEYWORDS="amd64"
 
-DEPEND="dev-lang/go"
+DEPEND="
+	dev-lang/go
+	dev-go/gopls
+"
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}"

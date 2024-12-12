@@ -70,6 +70,18 @@ encounter [the circular dependencies](https://wiki.gentoo.org/wiki/Portage/Help/
 problem, which is kind of annoying, and should be fix before you upgrade the
 whole `@world` :/
 
+For SSH connection, be sure to reset your `LANGUAGE` and `LC_MESSAGES` back to
+`C` when doing a fresh installation, some package will fail if your `locale.gen`
+hasn't ready yet.
+
+If you want to start debugging, or to verify whether this overlay breaks your
+system, you can always check `/var/db/pkg/...` for informations, some useful
+files may be:
+
+* `CONTENTS`, this is what the emerge actually merged into the system, with the
+  corresponding checksum (md5sum) and timestamp (seems like mtime)
+* `environment.bz2`, this is the whole build script
+
 ## Testing
 
 I'm using `podman` for testing if configuration is correct,
@@ -87,3 +99,35 @@ emerge ...
 ```
 
 You can use `emerge -1` with `emerge -vac` for faster testing.
+
+## Example Build
+
+With Gentoo livecd, following the [AMD64 handbook](https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Stage).
+
+```bash
+# in livecd
+cfdisk /dev/vda
+mkfs.fat -F 32 /dev/vda1
+mkfs.btrfs /dev/vda2
+mount /dev/vda2 /mnt/gentoo
+btrfs subvolume create /mnt/gentoo/@gentoo
+btrfs subvolume create /mnt/gentoo/@home
+umount /mnt/gentoo
+mount -o subvol=@gentoo /dev/vda2 /mnt/gentoo
+
+cd /mnt/gentoo
+wget '.../stage3-...'
+tar xpf stage3-*.tar.xz --xattrs-include='*.*' --numeric-owner -C /mnt/gentoo
+rm -fv stage3-*.tar.xz
+cp -L /etc/resolv.conf /mnt/gentoo/etc/
+arch-chroot /mnt/gentoo
+
+# in chroot
+mkdir /efi
+mount /dev/vda1 /efi
+mount -o subvol=@home /dev/vda2 /home
+
+# following the "Stage Design" part
+export LC_ALL="C"
+emerge ...
+```

@@ -5,6 +5,9 @@ esac
 
 # Trying to deducing the USE_EXPAND, and store to UNSTABLE and MNSTABLE.
 # TODO: Documents like everyone.
+#
+# This will add a (r)depend to UNSTABLE users as well.
+# The pygoscelis-papua/portage will enforce the USE and USE_EXPAND flags.
 
 if [[ -z "${_UNSTABLE_ECLASS}" ]]; then
 _UNSTABLE_ECLASS=1

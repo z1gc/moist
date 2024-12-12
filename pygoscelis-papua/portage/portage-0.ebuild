@@ -64,6 +64,7 @@ src_install() {
 	# Just extract what you really want.
 	insinto "/etc/portage"
 	for comp in "binrepos.conf" \
+							"mirrors" \
 						  "package.accept_keywords" \
 						  "package.license" \
 						  "patches" \

@@ -15,6 +15,7 @@ DEPEND="
 	dev-python/python-lsp-server
 	dev-util/bash-language-server
 	dev-util/lua-language-server
+	dev-util/typescript-language-server
 "
 RDEPEND="${DEPEND}"
 

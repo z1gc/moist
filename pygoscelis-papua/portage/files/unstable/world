@@ -4,6 +4,7 @@ pygoscelis-papua/kernel
 pygoscelis-papua/systemd
 
 # Development
+pygoscelis-papua/shell
 dev-python/mypy
 dev-util/shellcheck-bin
 dev-debug/gdb

@@ -44,10 +44,11 @@ system_postinst() {
 									 remote-fs.target || die
 
 	if use "gnome"; then
-		systemctl preset NetworkManager.service \
+		# They're not on the preset list :(
+		systemctl enable gdb.service \
+										 NetworkManager.service \
 										 NetworkManager-wait-online.service \
 										 NetworkManager-dispatcher.service || die
-		systemctl enable gdm.service || die
 	else
 		systemctl preset systemd-networkd.service \
 										 systemd-networkd-wait-online.service || die

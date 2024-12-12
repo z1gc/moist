@@ -20,18 +20,12 @@ function gitoxide() {
 }
 
 function add_repo() {
-  local append="$1"
-  local name="$2"
-  local uri="$3"
-  local is_main="$4"
+  local name="$1"
+  local uri="$2"
+  local is_main="$3"
 
-  local spec="/etc/portage/repos.conf/$append.conf"
+  local spec="/etc/portage/repos.conf"
   local target="/var/db/repos/$name"
-
-  if [[ -d "$target" ]]; then
-    echo "repo $name exists"
-    return
-  fi
 
   mkdir -p "/etc/portage/repos.conf"
 
@@ -65,11 +59,15 @@ sync-webrsync-verify-signature = yes" >> "$spec"
   gitoxide clone --depth 1 "$uri" "$target"
 }
 
+# cleanup everything
+rm -rfv /etc/portage/repos.conf
+rm -rfv /var/db/repos
+
 # emerge repo, they will be overwritten by pygoscelis-papau/portage
-add_repo "gentoo" "gentoo" "https://mirrors.ustc.edu.cn/gentoo.git" true
-add_repo "unstable" "unstable" "https://github.com/z1gc/unstable.git" false
-add_repo "unstable" "gentoo-zh" "https://github.com/microcai/gentoo-zh.git" false
-add_repo "unstable" "guru" "https://github.com/gentoo-mirror/guru.git" false
+add_repo "gentoo" "https://mirrors.ustc.edu.cn/gentoo.git" true
+add_repo "unstable" "https://github.com/z1gc/unstable.git" false
+add_repo "gentoo-zh" "https://github.com/microcai/gentoo-zh.git" false
+add_repo "guru" "https://github.com/gentoo-mirror/guru.git" false
 
 # cleanup
 rm -f /tmp/gix

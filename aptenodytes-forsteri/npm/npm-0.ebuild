@@ -6,7 +6,10 @@ SLOT="0"
 KEYWORDS="amd64"
 S="${WORKDIR}"
 
-DEPEND="net-libs/nodejs"
+DEPEND="
+	net-libs/nodejs
+	sys-apps/yarn
+"
 RDEPEND="${DEPEND}"
 
 src_install() {

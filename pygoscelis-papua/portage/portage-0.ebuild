@@ -14,6 +14,7 @@ SLOT="0"
 S="${WORKDIR}"
 
 # To ensure the installkernel configurations set up, we make it depends.
+# TODO: When in container, we don't add the installkernel.
 DEPEND="
 	aptenodytes-forsteri/installkernel
 	app-admin/sudo
@@ -91,10 +92,10 @@ src_install() {
 
 pkg_preinst() {
 	# remove existing files, don't want an extra dispatch-conf
-	rm_if_diff /etc/portage/binrepos.conf/gentoobinhost.conf
-	rm_if_diff /etc/portage/repos.conf/gentoo.conf
-	rm_if_diff /etc/portage/repos.conf/unstable.conf
-	rm_if_diff /etc/locale.gen
+	rm_if_diff "/etc/portage/binrepos.conf"
+	rm_if_diff "/etc/portage/package.accept_keywords"
+	rm_if_diff "/etc/portage/repos.conf"
+	rm_if_diff "/etc/locale.gen"
 }
 
 pkg_postinst() {

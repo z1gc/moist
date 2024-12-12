@@ -114,9 +114,9 @@ use_directory() {
 rm_if_diff() {
 	local target="$1"
 
-	if ! diff -q "${target}" "${D}${target}"; then
+	if ! diff -q "${target}" "${ED}${target}"; then
 		ewarn "Replacing conflict: ${target}"
-		rm -f "${target}"
+		rm -rf "${target}"
 	fi
 }
 

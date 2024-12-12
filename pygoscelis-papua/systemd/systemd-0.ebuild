@@ -61,11 +61,13 @@ system_postinst() {
 user_postinst() {
 	# user here:
 	for usr in "${UNSTABLE[@]}"; do
-		local systemctl="systemctl --user -M ${usr}@"
+		# the systemd seems ignoring the -M user, and still using $HOME:
+		local home="$(eval echo "~${usr}" || die)"
+		local systemctl="env HOME=${home} systemctl --user -M ${usr}@"
 
 		# won't double quote the $systemctl, we let it escape:
-		${systemctl} list-unit-files --state enabled | awk '$1 ~ /.+\..+/ {print $1}' \
-			| xargs -r ${systemctl} disable || die
+		${systemctl} list-unit-files --state enabled \
+			| awk '$1 ~ /.+\..+/ {print $1}' | xargs -r ${systemctl} disable || die
 
 		${systemctl} preset pipewire.service \
 								 pipewire.socket \

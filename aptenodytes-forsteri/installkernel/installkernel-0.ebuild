@@ -64,6 +64,10 @@ src_compile() {
 		fi
 	done
 
+	if [[ "${fsdev}" == "" ]]; then
+		die "Missing EFI boot partition, is it really mounted?"
+	fi
+
 	# try swap TODO: better way?
 	fsdev="$(lsblk -o NAME,MOUNTPOINTS -p -r | awk '$2 == "[SWAP]" {print $1}')"
 	if [[ "${fsdev}" != "" ]]; then

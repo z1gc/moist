@@ -33,7 +33,7 @@ Relation is `world` contains `pygoscelis-papua` contains `aptenodytes-forsteri`.
 For new build:
 
 ```bash
-curl -L https://github.com/z1gc/unstable/raw/refs/heads/main/boostrap.sh | bash
+curl -L https://github.com/z1gc/unstable/raw/refs/heads/main/bootstrap | bash
 
 # If you want to change your machine, or add user, or something else, re-run it:
 MNSTABLE=evil UNSTABLE=byte emerge -va1 pygoscelis-papua/portage

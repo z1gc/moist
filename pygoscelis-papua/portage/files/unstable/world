@@ -28,3 +28,4 @@ dev-vcs/gitoxide
 # Virtualization, container
 app-emulation/virt-manager
 app-containers/podman
+app-containers/podman-compose

@@ -7,6 +7,7 @@ app-i18n/ibus ~amd64
 app-i18n/ibus-rime ~amd64
 app-i18n/librime ~amd64
 app-i18n/librime-lua ~amd64
+app-containers/podman-compose ~amd64
 
 # Guru always testing:
 */*::guru ~amd64

@@ -13,12 +13,12 @@ KEYWORDS="amd64"
 SLOT="0"
 S="${WORKDIR}"
 
-# To ensure the installkernel configurations set up, we make it depends.
-# TODO: When in container, we don't add the installkernel.
 DEPEND="
-	aptenodytes-forsteri/installkernel
+	aptenodytes-forsteri/crossdev
 	app-admin/sudo
 "
+# To ensure the installkernel configurations set up, we make it depends.
+[[ "${container}" == "" ]] && DEPEND+="aptenodytes-forsteri/installkernel"
 RDEPEND="${DEPEND}"
 BDEPEND="app-portage/cpuid2cpuflags"
 
@@ -28,8 +28,8 @@ src_compile() {
 	# world and set, gentoo will sort it then :)
 	for comp in $(use_directory "world"); do
 		grep -o '^[^#]*' "${comp}" || die
-	done | sort > "world"
-	echo "" > "world_sets"
+	done | sort > "unstable"
+	echo "@unstable" > "world_sets"
 
 	# Share to everybody, huh, seems unneccessary to split two groups.
 	local u="${USESTABLE[*]} UNSTABLE: ${UNSTABLE[*]} MNSTABLE: ${MNSTABLE[*]}"
@@ -77,9 +77,15 @@ src_install() {
 		doins -r "${comp}" || die
 	done
 
-	# This will give an error of overwriting things we shouldn't, but safe yet.
+	# We just touch the world sets, you can test your packages freely within the
+	# @world, but it won't be "committed" into the unstable.
+	# This "backdoor" is for crossdev, or else the @world should keep empty.
+	# And yes, the @world_sets shouldn't be touched.
+	insinto "/etc/portage/sets"
+	doins "unstable"
+
 	insinto "/var/lib/portage"
-	doins "world" "world_sets"
+	doins "world_sets"
 
 	# locale, TODO: to other ebuild?
 	insinto "/etc"
@@ -93,7 +99,6 @@ src_install() {
 pkg_preinst() {
 	# remove existing files, don't want an extra dispatch-conf
 	rm_if_diff "/etc/portage/binrepos.conf"
-	rm_if_diff "/etc/portage/package.accept_keywords"
 	rm_if_diff "/etc/portage/repos.conf"
 	rm_if_diff "/etc/locale.gen"
 }

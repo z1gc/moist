@@ -1,3 +1,10 @@
+#!/usr/bin/env bash
+# This shebang is only for editor to recognize the shell script.
+
+post_src_install() {
+	cd "${ED}" || die
+
+	(patch -p1 || die) <<'EOF'
 --- a/opt/brave.com/brave/brave-browser	2024-12-11 10:44:13.142435365 +0800
 +++ b/opt/brave.com/brave/brave-browser	2024-12-11 10:46:23.533731267 +0800
 @@ -26,14 +26,28 @@
@@ -30,3 +37,7 @@
  
 -"$HERE/brave" "$@" || true
 +"$HERE/brave" "${FLAG_LIST[@]}" "$@" || true
+EOF
+
+	# No need to `doexe`, we're on the "image" directory already.
+}

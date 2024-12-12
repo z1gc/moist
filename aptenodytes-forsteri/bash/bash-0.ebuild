@@ -4,6 +4,7 @@ inherit unstable
 
 SLOT="0"
 KEYWORDS="amd64"
+S="${WORKDIR}"
 
 DEPEND="app-shells/bash"
 RDEPEND="${DEPEND}"

@@ -4,6 +4,7 @@ inherit unstable
 
 SLOT="0"
 KEYWORDS="amd64"
+S="${WORKDIR}"
 
 # The order of merging isn't deterministic, therefore we can't make any
 # assumptions.

@@ -4,14 +4,13 @@ inherit unstable
 
 SLOT="0"
 KEYWORDS="amd64"
+S="${WORKDIR}"
 
 DEPEND="
 	dev-lang/go
 	dev-go/gopls
 "
 RDEPEND="${DEPEND}"
-
-S="${WORKDIR}"
 
 go_doins() {
 	# homeinto should set $HOME:

@@ -27,5 +27,5 @@ src_install() {
 
 pkg_preinst() {
 	# Try to ignore the annoying `dispatch-conf`.
-	rm_if_diff -f "/etc/fish/config.fish"
+	rm_if_diff "/etc/fish/config.fish"
 }

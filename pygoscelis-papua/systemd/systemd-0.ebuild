@@ -4,9 +4,11 @@ inherit unstable
 
 SLOT="0"
 KEYWORDS="amd64"
+S="${WORKDIR}"
 
 DEPEND="
 	sys-apps/systemd
+	app-admin/sudo
 	gnome? (
 		gnome-base/gnome-light
 		media-libs/libpulse
@@ -62,8 +64,7 @@ user_postinst() {
 	# user here:
 	for usr in "${UNSTABLE[@]}"; do
 		# the systemd seems ignoring the -M user, and still using $HOME:
-		local home="$(eval echo "~${usr}" || die)"
-		local systemctl="env HOME=${home} systemctl --user -M ${usr}@"
+		local systemctl="sudo -u ${usr} systemctl --user"
 
 		# won't double quote the $systemctl, we let it escape:
 		${systemctl} list-unit-files --state enabled \

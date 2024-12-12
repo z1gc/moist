@@ -11,6 +11,7 @@ inherit unstable
 
 KEYWORDS="amd64"
 SLOT="0"
+S="${WORKDIR}"
 
 # To ensure the installkernel configurations set up, we make it depends.
 DEPEND="
@@ -19,8 +20,6 @@ DEPEND="
 "
 RDEPEND="${DEPEND}"
 BDEPEND="app-portage/cpuid2cpuflags"
-
-S="${WORKDIR}"
 
 src_compile() {
 	unstable_mnstable
@@ -42,7 +41,6 @@ src_compile() {
 
 	# sudo
 	echo "%wheel ALL=(ALL:ALL) ALL" > "wheel" || die
-	chmod 0640 "wheel" || die
 }
 
 src_install() {
@@ -75,12 +73,13 @@ src_install() {
 	insinto "/var/lib/portage"
 	doins "world" "world_sets"
 
-	insinto "/etc/sudoers.d"
-	doins "wheel" || die
-
 	# locale, TODO: to other ebuild?
 	insinto "/etc"
 	doins "${FILESDIR}/unstable/locale.gen"
+
+	insinto "/etc/sudoers.d"
+	insopts "-m440"
+	doins "wheel" || die
 }
 
 pkg_preinst() {

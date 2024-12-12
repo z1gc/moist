@@ -4,6 +4,7 @@ inherit unstable
 
 SLOT="0"
 KEYWORDS="amd64"
+S="${WORKDIR}"
 
 DEPEND="
 	sys-kernel/installkernel
@@ -14,8 +15,6 @@ BDEPEND="
 	sys-apps/util-linux
 	sys-devel/gettext
 "
-
-S="${WORKDIR}"
 
 pkg_pretend() {
 	if [[ "$(stat -f -c %T /)" != "btrfs" ]]; then

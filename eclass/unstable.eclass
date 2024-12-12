@@ -131,6 +131,9 @@ homeinto() {
 
 	for usr in "${UNSTABLE[@]}"; do
 		local home="$(eval echo "~${usr}" || die)"
+		diropts "-o${usr}" "-g${usr}" "-m755"
+		dodir "${home}/${target}"
+
 		insopts "-o${usr}" "-g${usr}" "-m644"
 		insinto "${home}/${target}"
 		HOME="${home}" "${op}" "${@}"

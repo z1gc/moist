@@ -57,15 +57,21 @@ src_install() {
 	# And the common {rest} part:
 	#   /world: What this USE brings up to the world.
 	#   /make.conf, ...: /etc/portage
+	#
+	# IMO the package.accept_keywords and package.license are irrelavent to any
+	# machine, it has smallest side effect on merging packages. And the repos.conf
+	# and patches are now all in just one unstable, but not others now.
+	# Just extract what you really want.
 	insinto "/etc/portage"
-	for comp in $(use_directory "binrepos.conf" \
-															"make.conf" \
-															"package.accept_keywords" \
-															"package.license" \
-															"package.use" \
-															"patches" \
-															"repos.conf")
-	do
+	for comp in "binrepos.conf" \
+						  "package.accept_keywords" \
+						  "package.license" \
+						  "patches" \
+						  "repos.conf"; do
+		doins -r "${FILESDIR}/unstable/${comp}"
+	done
+	for comp in $(use_directory "make.conf" \
+															"package.use"); do
 		doins -r "${comp}" || die
 	done
 

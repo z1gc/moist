@@ -15,12 +15,20 @@ DEPEND="
 	media-fonts/source-han-sans
 	media-fonts/wqy-microhei
 	media-fonts/wqy-zenhei
+	gnome-extra/gnome-shell-extension-paperwm
+	gnome-extra/gnome-shell-extension-switcher
+	gnome-extra/gnome-shell-extension-ddcutil
+	aptenodytes-forsteri/rime-ice
 "
 RDEPEND="${DEPEND}"
 
 src_install() {
+	unstable_mnstable
+
 	insinto "/etc/fonts/conf.avail"
-	doins -r "${FILESDIR}/." || die
+	doins -r "${FILESDIR}/66-noto-cjk-sc.conf" || die
+
+	homeinto ".config/environment.d" doins "${FILESDIR}/01-localize.conf"
 }
 
 pkg_postinst() {
@@ -44,4 +52,6 @@ pkg_postinst() {
 														70-noto-cjk.conf \
 														75-noto-emoji-fallback.conf \
 														90-synthetic.conf || die
+
+	# TODO: gnome dconf?
 }

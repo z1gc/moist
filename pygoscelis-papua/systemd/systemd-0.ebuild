@@ -83,6 +83,7 @@ user_postinst() {
 
 pkg_postinst() {
 	unstable_mnstable
+
 	system_postinst
 	user_postinst
 }

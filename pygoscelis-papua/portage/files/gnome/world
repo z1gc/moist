@@ -1,8 +1,6 @@
-app-i18n/ibus-rime
-app-i18n/librime-lua
+pygoscelis-papua/gnome
 gnome-base/dconf-editor
 gnome-extra/gnome-tweaks
 gui-apps/wl-clipboard
 kde-apps/okular
-pygoscelis-papua/fonts
 www-client/brave-bin

@@ -1,0 +1,20 @@
+# Rime table
+# coding: utf-8
+#@/db_name	custom_phrase_double.txt
+#@/db_type	tabledb
+#
+# Format:
+# Output<Tab>Input<Tab>Priority
+
+——	poae
+……	vglm
+the	the
+that	that
+hhhh	hhhh
+emmm	emmm
+get	get
+set	set
+dot	dot
+not	not
+fuck	fuck
+copy	copy
